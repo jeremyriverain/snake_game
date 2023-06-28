@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flame/game.dart';
-import 'package:snake_game/food.dart';
-import 'package:snake_game/snake.dart';
+import 'package:snake_game/components/food.dart';
+import 'package:snake_game/components/snake/snake.dart';
 
 class SnakeGame extends FlameGame {
   @override
