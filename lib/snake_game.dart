@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:snake_game/components/food.dart';
-import 'package:snake_game/components/snake/snake.dart';
+import 'package:snake_game/food.dart';
+import 'package:snake_game/snake/snake.dart';
 import 'package:snake_game/score_banner.dart';
 
 class SnakeGame extends FlameGame {

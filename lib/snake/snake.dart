@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:snake_game/components/snake/snake_body.dart';
-import 'package:snake_game/components/snake/snake_head.dart';
-import 'package:snake_game/components/snake/snake_tail.dart';
+import 'package:snake_game/snake/snake_body.dart';
+import 'package:snake_game/snake/snake_head.dart';
+import 'package:snake_game/snake/snake_tail.dart';
 import 'package:snake_game/constants.dart';
 
 class Snake extends Component {
