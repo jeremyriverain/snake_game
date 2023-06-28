@@ -1,12 +1,16 @@
 import 'dart:ui';
 
 import 'package:flame/game.dart';
-import 'package:snake_game/sprites/food.dart';
-import 'package:snake_game/sprites/grid.dart';
+import 'package:snake_game/managers/game_manager.dart';
+import 'package:snake_game/components/food.dart';
+import 'package:snake_game/components/grid.dart';
 import 'package:snake_game/game_config.dart';
-import 'package:snake_game/sprites/snake/snake.dart';
+import 'package:snake_game/components/score_display.dart';
+import 'package:snake_game/components/snake/snake.dart';
 
 class SnakeGame extends FlameGame {
+  GameManager gameManager = GameManager();
+
   @override
   Color backgroundColor() => const Color(0xFF578B33);
 
@@ -27,10 +31,23 @@ class SnakeGame extends FlameGame {
     snake.position = background.position +
         Vector2(GameConfig.sizeCell * 4, GameConfig.sizeCell * 4);
 
-    addAll([
-      background,
-      food,
-      snake,
-    ]);
+    final scoreDisplay = ScoreDisplay()
+      ..position = background.position +
+          Vector2(
+            10,
+            -GameConfig.sizeCell - 10,
+          );
+
+    addAll([background, food, snake, scoreDisplay]);
+  }
+
+  void startGame() {
+    gameManager.reset();
+    gameManager.state = GameState.playing;
+  }
+
+  void resetGame() {
+    startGame();
+    overlays.remove('gameOverOverlay');
   }
 }

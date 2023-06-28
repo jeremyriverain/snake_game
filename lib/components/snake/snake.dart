@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:snake_game/game_config.dart';
-import 'package:snake_game/sprites/snake/snake_body.dart';
-import 'package:snake_game/sprites/snake/snake_head.dart';
-import 'package:snake_game/sprites/snake/snake_tail.dart';
+import 'package:snake_game/components/snake/snake_body.dart';
+import 'package:snake_game/components/snake/snake_head.dart';
+import 'package:snake_game/components/snake/snake_tail.dart';
 
 class Snake extends PositionComponent {
   @override
