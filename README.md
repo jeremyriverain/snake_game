@@ -1,16 +1,10 @@
 # snake_game
 
-Les images (serpent, pomme, textures, ) proviennent de [opengameart.org](https://opengameart.org/content/snake-graphics).
+Assets (snake, food, textures, ) comes from [opengameart.org](https://opengameart.org/content/snake-graphics).
 
-## Getting Started
+The logo comes from [game-icons.net](https://game-icons.net/).
 
-This project is a starting point for a Flutter application.
+## Launcher icons
 
-A few resources to get you started if this is your first Flutter project:
+The [flutter_launcher_icons](https://pub.dev/packages/flutter_launcher_icons) package is used.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
