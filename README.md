@@ -1,6 +1,6 @@
 # snake_game
 
-A new Flutter project.
+Les images (serpent, pomme, textures, ) proviennent de [opengameart.org](https://opengameart.org/content/snake-graphics).
 
 ## Getting Started
 
