@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/game.dart';
 import 'package:snake_game/food.dart';
+import 'package:snake_game/snake.dart';
 
 class SnakeGame extends FlameGame {
   @override
@@ -9,6 +10,6 @@ class SnakeGame extends FlameGame {
 
   @override
   onLoad() async {
-    add(Food());
+    addAll([Food(), Snake()]);
   }
 }
