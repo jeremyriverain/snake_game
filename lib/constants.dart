@@ -4,4 +4,4 @@ const double sizeCell = 32;
 
 const double heightScoreBanner = 55;
 
-const double globalPadding = 15;
+const double globalPadding = 25;
