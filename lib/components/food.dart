@@ -8,6 +8,5 @@ class Food extends SpriteComponent {
         srcSize: Vector2(sizeItemSprite, sizeItemSprite),
         srcPosition: Vector2(sizeItemSprite * 3, 0));
     size = Vector2.all(sizeCell);
-    position = Vector2(10, 500);
   }
 }

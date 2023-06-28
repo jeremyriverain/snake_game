@@ -4,8 +4,10 @@ import 'package:snake_game/snake_game.dart';
 
 void main() {
   runApp(
-    GameWidget(
-      game: SnakeGame(),
+    SafeArea(
+      child: GameWidget(
+        game: SnakeGame(),
+      ),
     ),
   );
 }
