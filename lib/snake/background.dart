@@ -1,19 +1,39 @@
-import 'dart:async';
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:snake_game/constants.dart';
 
-class Background extends Component with HasGameRef {
+class Background extends PositionComponent with HasGameRef {
+  final int numRows;
+  final int numColumns;
+
+  Background({
+    required this.numRows,
+    required this.numColumns,
+  });
+
   @override
-  FutureOr<void> onLoad() {
-    add(RectangleComponent(
-      position: Vector2(globalPadding, globalPadding + heightScoreBanner),
-      size: Vector2(
-        gameRef.size.x - globalPadding * 2,
-        gameRef.size.y - heightScoreBanner - globalPadding * 2,
-      ),
-      paint: Paint()..color = const Color(0xFFA3D148),
-    ));
+  onLoad() async {
+    final List<SpriteComponent> tiles = [];
+
+    for (var c = 0; c < numColumns; c++) {
+      for (var i = 0; i < numRows; i++) {
+        tiles.add(
+          SpriteComponent()
+            ..sprite = await Sprite.load(
+              'game_sprite.png',
+              srcSize: Vector2(sizeItemSprite, sizeItemSprite),
+              srcPosition: Vector2(
+                sizeItemSprite * 4,
+                (i.isEven && c.isEven) || (i.isOdd && c.isOdd)
+                    ? 0
+                    : sizeItemSprite,
+              ),
+            )
+            ..size = size = Vector2.all(sizeCell)
+            ..position = Vector2(i * sizeCell, c * sizeCell),
+        );
+      }
+    }
+
+    addAll(tiles);
   }
 }
