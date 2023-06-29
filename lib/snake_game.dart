@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/game.dart';
 import 'package:snake_game/managers/game_manager.dart';
 import 'package:snake_game/components/food.dart';
@@ -10,9 +8,6 @@ import 'package:snake_game/components/snake/snake.dart';
 
 class SnakeGame extends FlameGame {
   GameManager gameManager = GameManager();
-
-  @override
-  Color backgroundColor() => const Color(0xFF578B33);
 
   Food food = Food();
   Snake snake = Snake();
@@ -25,11 +20,11 @@ class SnakeGame extends FlameGame {
         (size.y - GameConfig.rows * GameConfig.sizeCell) / 2,
       );
 
-    food.position =
-        background.position + Vector2(GameConfig.sizeCell, GameConfig.sizeCell);
+    food.position = background.position +
+        Vector2(GameConfig.sizeCell * 9, GameConfig.sizeCell * 9);
 
     snake.position = background.position +
-        Vector2(GameConfig.sizeCell * 4, GameConfig.sizeCell * 4);
+        Vector2(GameConfig.sizeCell * 3, GameConfig.sizeCell * 9);
 
     final scoreDisplay = ScoreDisplay()
       ..position = background.position +
