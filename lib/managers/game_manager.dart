@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:snake_game/main.dart';
 import 'package:snake_game/snake_game.dart';
 
 class GameManager extends Component with HasGameRef<SnakeGame> {
