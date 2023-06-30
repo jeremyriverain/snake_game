@@ -26,8 +26,9 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   initFood(Field field) {
     food = Food()
       ..position = virtualGrid.toAbsolutePosition(
-        virtualGridVector: Vector2(9, 9),
-      );
+            virtualGridVector: Vector2(9, 9),
+          ) +
+          Vector2.all(GameConfig.sizeCell / 2);
   }
 
   initSnake(Field field) {
@@ -82,8 +83,9 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     remove(food);
     food = Food()
       ..position = virtualGrid.toAbsolutePosition(
-        virtualGridVector: nextFoodPosition,
-      );
+            virtualGridVector: nextFoodPosition,
+          ) +
+          Vector2.all(GameConfig.sizeCell / 2);
     add(food);
   }
 
@@ -96,19 +98,13 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
         )
         .toList();
 
-    forbiddenPositions.add(
-      virtualGrid.toVirtualGrid(
-        component: food,
-      ),
-    );
-
     final potentialFoodPosition = virtualGrid
         .getAllCells()
         .where((cell) => !forbiddenPositions.contains(cell))
         .toList();
 
-    final rng = Random();
-    return potentialFoodPosition[rng.nextInt(potentialFoodPosition.length)];
+    final random = Random();
+    return potentialFoodPosition[random.nextInt(potentialFoodPosition.length)];
   }
 
   @override
