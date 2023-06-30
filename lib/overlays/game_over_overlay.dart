@@ -16,6 +16,11 @@ class GameOverOverlay extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Card(
+              color: const Color.fromARGB(180, 0, 0, 0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                //set border radius more than 50% of height and width to make circle
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Column(
@@ -30,7 +35,7 @@ class GameOverOverlay extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .displaySmall
-                            ?.copyWith(color: Colors.black),
+                            ?.copyWith(color: Colors.white),
                       ),
                     ),
                     ElevatedButton(

@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:snake_game/game_config.dart';
 
-class SnakeBody extends SpriteComponent {
-  SnakeBody()
+class SnakeBodyPart extends SpriteComponent {
+  SnakeBodyPart()
       : super(
           size: Vector2.all(
             GameConfig.sizeCell,
