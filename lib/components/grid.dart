@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/snake_game.dart';
@@ -8,6 +9,13 @@ class Grid extends PositionComponent with HasGameRef<SnakeGame> {
   @override
   onLoad() async {
     addAll(await getGridCells());
+
+    size = Vector2(
+      GameConfig.sizeCell * GameConfig.columns,
+      GameConfig.sizeCell * GameConfig.rows,
+    );
+
+    add(RectangleHitbox());
   }
 
   Future<List<SpriteComponent>> getGridCells() async {

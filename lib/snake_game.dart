@@ -41,6 +41,11 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     overlays.remove(MyApp.instructionsOverlay);
   }
 
+  void gameOver() {
+    gameManager.state = GameState.gameOver;
+    overlays.add(MyApp.gameOverOverlay);
+  }
+
   void resetGame() {
     startGame();
     overlays.remove('gameOverOverlay');

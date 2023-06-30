@@ -26,7 +26,7 @@ class Snake extends PositionComponent with HasGameRef<SnakeGame> {
   @override
   void update(double dt) {
     if (gameRef.gameManager.isPlaying) {
-      position += Vector2(100, 0) * dt;
+      position += Vector2(110, 0) * dt;
     }
   }
 }
