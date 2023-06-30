@@ -1,5 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/particles.dart';
+import 'package:flutter/material.dart';
 import 'package:snake_game/components/food.dart';
 import 'package:snake_game/components/grid.dart';
 import 'package:snake_game/game_config.dart';
@@ -31,6 +33,15 @@ class SnakeHead extends SpriteComponent
     if (other is Food) {
       game.gameManager.increaseScore();
     } else if (other is Grid) {
+      add(
+        ParticleSystemComponent(
+          position: Vector2(GameConfig.sizeCell, GameConfig.sizeCell / 2),
+          particle: CircleParticle(
+            radius: GameConfig.sizeCell,
+            paint: Paint()..color = Colors.red.withOpacity(.5),
+          ),
+        ),
+      );
       game.gameOver();
     }
   }
