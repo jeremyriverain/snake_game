@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +11,11 @@ import 'package:snake_game/game_config.dart';
 import 'package:snake_game/components/score_display.dart';
 import 'package:snake_game/components/snake/snake.dart';
 
-class SnakeGame extends FlameGame with KeyboardEvents {
+class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   GameManager gameManager = GameManager();
+
+  @override
+  Color backgroundColor() => const Color(0xFF578B33);
 
   Food food = Food();
   Snake snake = Snake();
@@ -37,7 +41,7 @@ class SnakeGame extends FlameGame with KeyboardEvents {
             -GameConfig.sizeCell - 10,
           );
 
-    addAll([background, food, snake, scoreDisplay]);
+    addAll([ScreenHitbox(), background, food, snake, scoreDisplay]);
   }
 
   void startGame() {
