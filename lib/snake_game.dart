@@ -7,7 +7,6 @@ import 'package:snake_game/managers/game_manager.dart';
 import 'package:snake_game/components/food.dart';
 import 'package:snake_game/components/grid.dart';
 import 'package:snake_game/game_config.dart';
-import 'package:snake_game/components/score_display.dart';
 import 'package:snake_game/components/snake/snake.dart';
 
 class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
@@ -33,14 +32,7 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     snake.position = background.position +
         Vector2(GameConfig.sizeCell * 3, GameConfig.sizeCell * 9);
 
-    final scoreDisplay = ScoreDisplay()
-      ..position = background.position +
-          Vector2(
-            10,
-            -GameConfig.sizeCell - 10,
-          );
-
-    addAll([background, food, snake, scoreDisplay]);
+    addAll([background, food, snake]);
   }
 
   void startGame() {
