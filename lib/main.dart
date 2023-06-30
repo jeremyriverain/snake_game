@@ -20,13 +20,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GameWidget(
-      game: game,
-      overlayBuilderMap: <String, Widget Function(BuildContext, Game)>{
-        instructionsOverlay: (context, game) => InstructionsOverlay(game),
-        gameOverOverlay: (context, game) => GameOverOverlay(game),
-      },
-      initialActiveOverlays: const [instructionsOverlay],
+    return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'PressStart2P',
+      ),
+      home: GameWidget(
+        game: game,
+        overlayBuilderMap: <String, Widget Function(BuildContext, Game)>{
+          instructionsOverlay: (context, game) => InstructionsOverlay(game),
+          gameOverOverlay: (context, game) => GameOverOverlay(game),
+        },
+        initialActiveOverlays: const [instructionsOverlay],
+      ),
     );
   }
 }

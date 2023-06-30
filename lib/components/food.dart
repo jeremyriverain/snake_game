@@ -1,7 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:snake_game/game_config.dart';
+import 'package:snake_game/snake_game.dart';
 
-class Food extends SpriteComponent {
+class Food extends SpriteComponent with HasGameRef<SnakeGame> {
   @override
   onLoad() async {
     sprite = await Sprite.load('game_sprite.png',

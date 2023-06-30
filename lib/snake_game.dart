@@ -1,4 +1,3 @@
-import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
@@ -41,7 +40,7 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
             -GameConfig.sizeCell - 10,
           );
 
-    addAll([ScreenHitbox(), background, food, snake, scoreDisplay]);
+    addAll([background, food, snake, scoreDisplay]);
   }
 
   void startGame() {
@@ -76,7 +75,6 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     }
 
     if (gameManager.isPlaying) {
-      // TODO
     } else if (gameManager.isIntro) {
       startGame();
     }
