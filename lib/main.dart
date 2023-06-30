@@ -1,11 +1,16 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:snake_game/overlays/score_overlay.dart';
 import 'package:snake_game/snake_game.dart';
 import 'package:snake_game/overlays/game_over_overlay.dart';
 import 'package:snake_game/overlays/instructions_overlay.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   runApp(const MyApp());
 }
 
