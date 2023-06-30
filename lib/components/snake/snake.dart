@@ -22,7 +22,9 @@ class Snake extends PositionComponent with HasGameRef<SnakeGame> {
     SnakeHead(),
   ];
 
-  Vector2 direction = GameConfig.right;
+  Snake() : super(priority: 1);
+
+  Vector2 direction = Vector2(110, 0);
 
   @override
   FutureOr<void> onLoad() {
