@@ -28,7 +28,10 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
 
     food = Food()
       ..position = background.position +
-          Vector2(GameConfig.sizeCell * 9, GameConfig.sizeCell * 9);
+          Vector2(
+            GameConfig.sizeCell * 9 + GameConfig.sizeCell / 2,
+            GameConfig.sizeCell * 9 + GameConfig.sizeCell / 2,
+          );
 
     snake = Snake()
       ..position = background.position +
@@ -37,6 +40,7 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
 
   @override
   onLoad() async {
+    overlays.add(MyApp.instructionsOverlay);
     resetComponents();
     addAll([background, food, snake]);
   }

@@ -34,7 +34,6 @@ class MyApp extends StatelessWidget {
           scoreOverlay: (context, game) => ScoreOverlay(game),
         },
         initialActiveOverlays: const [
-          instructionsOverlay,
           scoreOverlay,
         ],
       ),
