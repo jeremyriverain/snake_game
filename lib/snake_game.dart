@@ -1,48 +1,59 @@
+import 'dart:math';
+
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:snake_game/main.dart';
-import 'package:snake_game/managers/game_manager.dart';
+import 'package:snake_game/game_manager.dart';
 import 'package:snake_game/components/food.dart';
-import 'package:snake_game/components/grid.dart';
+import 'package:snake_game/components/field.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/components/snake/snake.dart';
+import 'package:snake_game/virtual_grid.dart';
 
 class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
-  GameManager gameManager = GameManager();
+  final GameManager gameManager = GameManager();
 
+  late final VirtualGrid virtualGrid;
   @override
   Color backgroundColor() => const Color(0xFF578B33);
 
-  late Grid background;
+  late Field field;
   late Food food;
   late Snake snake;
 
-  resetComponents() {
-    background = Grid()
-      ..position = Vector2(
-        (size.x - GameConfig.columns * GameConfig.sizeCell) / 2,
-        (size.y - GameConfig.rows * GameConfig.sizeCell) / 2,
-      );
-
+  initFood(Field field) {
     food = Food()
-      ..position = background.position +
-          Vector2(
-            GameConfig.sizeCell * 9 + GameConfig.sizeCell / 2,
-            GameConfig.sizeCell * 9 + GameConfig.sizeCell / 2,
-          );
+      ..position = virtualGrid.toAbsolutePosition(
+        virtualGridVector: Vector2(9, 9),
+      );
+  }
 
+  initSnake(Field field) {
     snake = Snake()
-      ..position = background.position +
-          Vector2(GameConfig.sizeCell * 3, GameConfig.sizeCell * 9);
+      ..position =
+          virtualGrid.toAbsolutePosition(virtualGridVector: Vector2(3, 9));
   }
 
   @override
   onLoad() async {
     overlays.add(MyApp.instructionsOverlay);
-    resetComponents();
-    addAll([background, food, snake]);
+    field = Field()
+      ..position = Vector2(
+        (size.x - GameConfig.columns * GameConfig.sizeCell) / 2,
+        (size.y - GameConfig.rows * GameConfig.sizeCell) / 2,
+      );
+
+    virtualGrid = VirtualGrid(
+      sizeCell: GameConfig.sizeCell,
+      columns: GameConfig.columns,
+      rows: GameConfig.rows,
+      gridPosition: field.position,
+    );
+    initFood(field);
+    initSnake(field);
+    addAll([field, food, snake]);
   }
 
   void startGame() {
@@ -59,9 +70,45 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   void resetGame() {
     startGame();
     overlays.remove('gameOverOverlay');
-    removeAll([background, snake, food]);
-    resetComponents();
-    addAll([background, food, snake]);
+    removeAll([snake, food]);
+    initFood(field);
+    initSnake(field);
+    addAll([food, snake]);
+  }
+
+  void eatFood() {
+    gameManager.increaseScore();
+    final nextFoodPosition = getNextPositionFood(snake);
+    remove(food);
+    food = Food()
+      ..position = virtualGrid.toAbsolutePosition(
+        virtualGridVector: nextFoodPosition,
+      );
+    add(food);
+  }
+
+  Vector2 getNextPositionFood(Snake snake) {
+    final forbiddenPositions = snake.bodyParts
+        .map(
+          (element) => virtualGrid.toVirtualGrid(
+            component: element,
+          ),
+        )
+        .toList();
+
+    forbiddenPositions.add(
+      virtualGrid.toVirtualGrid(
+        component: food,
+      ),
+    );
+
+    final potentialFoodPosition = virtualGrid
+        .getAllCells()
+        .where((cell) => !forbiddenPositions.contains(cell))
+        .toList();
+
+    final rng = Random();
+    return potentialFoodPosition[rng.nextInt(potentialFoodPosition.length)];
   }
 
   @override

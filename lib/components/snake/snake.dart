@@ -22,6 +22,8 @@ class Snake extends PositionComponent with HasGameRef<SnakeGame> {
     SnakeHead(),
   ];
 
+  Vector2 direction = GameConfig.right;
+
   @override
   FutureOr<void> onLoad() {
     addAll(bodyParts);
@@ -30,7 +32,7 @@ class Snake extends PositionComponent with HasGameRef<SnakeGame> {
   @override
   void update(double dt) {
     if (gameRef.gameManager.isPlaying) {
-      position += Vector2(110, 0) * dt;
+      position += direction * dt;
     }
   }
 }
