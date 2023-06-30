@@ -15,23 +15,29 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   @override
   Color backgroundColor() => const Color(0xFF578B33);
 
-  Food food = Food();
-  Snake snake = Snake();
+  late Grid background;
+  late Food food;
+  late Snake snake;
 
-  @override
-  onLoad() async {
-    final background = Grid()
+  resetComponents() {
+    background = Grid()
       ..position = Vector2(
         (size.x - GameConfig.columns * GameConfig.sizeCell) / 2,
         (size.y - GameConfig.rows * GameConfig.sizeCell) / 2,
       );
 
-    food.position = background.position +
-        Vector2(GameConfig.sizeCell * 9, GameConfig.sizeCell * 9);
+    food = Food()
+      ..position = background.position +
+          Vector2(GameConfig.sizeCell * 9, GameConfig.sizeCell * 9);
 
-    snake.position = background.position +
-        Vector2(GameConfig.sizeCell * 3, GameConfig.sizeCell * 9);
+    snake = Snake()
+      ..position = background.position +
+          Vector2(GameConfig.sizeCell * 3, GameConfig.sizeCell * 9);
+  }
 
+  @override
+  onLoad() async {
+    resetComponents();
     addAll([background, food, snake]);
   }
 
@@ -49,6 +55,9 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   void resetGame() {
     startGame();
     overlays.remove('gameOverOverlay');
+    removeAll([background, snake, food]);
+    resetComponents();
+    addAll([background, food, snake]);
   }
 
   @override

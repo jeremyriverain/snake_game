@@ -8,24 +8,23 @@ import 'package:snake_game/components/snake/snake_tail.dart';
 import 'package:snake_game/snake_game.dart';
 
 class Snake extends PositionComponent with HasGameRef<SnakeGame> {
-  final head = SnakeHead();
-
   final bodyParts = [
+    SnakeTail()
+      ..position = -Vector2(
+        GameConfig.sizeCell * 2,
+        0,
+      ),
     SnakeBodyPart()
       ..position = -Vector2(
         GameConfig.sizeCell,
         0,
       ),
+    SnakeHead(),
   ];
-  final tail = SnakeTail()
-    ..position = -Vector2(
-      GameConfig.sizeCell * 2,
-      0,
-    );
 
   @override
   FutureOr<void> onLoad() {
-    addAll([head, ...bodyParts, tail]);
+    addAll(bodyParts);
   }
 
   @override
