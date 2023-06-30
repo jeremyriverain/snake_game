@@ -27,12 +27,18 @@ class SnakeHead extends SpriteComponent
   }
 
   @override
+  void onCollisionEnd(PositionComponent other) {
+    super.onCollisionEnd(other);
+    if (other is Food) {
+      game.eatFood();
+    }
+  }
+
+  @override
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is Food) {
-      game.eatFood();
-    } else if (other is Field) {
+    if (other is Field) {
       add(
         ParticleSystemComponent(
           position: Vector2(GameConfig.sizeCell, GameConfig.sizeCell / 2),

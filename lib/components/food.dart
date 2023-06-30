@@ -3,8 +3,7 @@ import 'package:flame/components.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/snake_game.dart';
 
-class Food extends SpriteComponent
-    with HasGameRef<SnakeGame>, CollisionCallbacks {
+class Food extends SpriteComponent with HasGameRef<SnakeGame> {
   Food()
       : super(
           size: Vector2.all(
@@ -25,12 +24,5 @@ class Food extends SpriteComponent
     );
 
     add(hitbox);
-  }
-
-  @override
-  void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollisionStart(intersectionPoints, other);
-    remove(hitbox);
   }
 }
