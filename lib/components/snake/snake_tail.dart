@@ -13,7 +13,7 @@ class SnakeTail extends SpriteComponent {
   onLoad() async {
     sprite = await Sprite.load(
       'game_sprite.png',
-      srcSize: Vector2(GameConfig.sizeAsset, GameConfig.sizeAsset),
+      srcSize: Vector2(GameConfig.sizeCellAsset, GameConfig.sizeCellAsset),
       srcPosition: Vector2(0, 0),
     );
   }

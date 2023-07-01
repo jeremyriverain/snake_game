@@ -19,8 +19,8 @@ class SnakeHead extends SpriteComponent
   onLoad() async {
     sprite = await Sprite.load(
       'game_sprite.png',
-      srcSize: Vector2(GameConfig.sizeAsset, GameConfig.sizeAsset),
-      srcPosition: Vector2(GameConfig.sizeAsset * 2, 0),
+      srcSize: Vector2(GameConfig.sizeCellAsset, GameConfig.sizeCellAsset),
+      srcPosition: Vector2(GameConfig.sizeCellAsset * 2, 0),
     );
 
     add(RectangleHitbox());
@@ -30,7 +30,7 @@ class SnakeHead extends SpriteComponent
   void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
     if (other is Food) {
-      game.eatFood();
+      game.onEatFood();
     }
   }
 

@@ -13,8 +13,8 @@ class SnakeBodyPart extends SpriteComponent {
   onLoad() async {
     sprite = await Sprite.load(
       'game_sprite.png',
-      srcSize: Vector2(GameConfig.sizeAsset, GameConfig.sizeAsset),
-      srcPosition: Vector2(GameConfig.sizeAsset * 1, 0),
+      srcSize: Vector2(GameConfig.sizeCellAsset, GameConfig.sizeCellAsset),
+      srcPosition: Vector2(GameConfig.sizeCellAsset * 1, 0),
     );
   }
 }

@@ -21,8 +21,9 @@ class Food extends SpriteComponent with HasGameRef<SnakeGame> {
   onLoad() async {
     sprite = await Sprite.load(
       'game_sprite.png',
-      srcSize: Vector2(GameConfig.sizeAsset, GameConfig.sizeAsset),
-      srcPosition: Vector2(GameConfig.sizeAsset * 3, 0),
+      srcSize:
+          Vector2(GameConfig.sizeCellAsset - 3, GameConfig.sizeCellAsset - 3),
+      srcPosition: Vector2(GameConfig.sizeCellAsset * 3 + 3, 0),
     );
 
     size = Vector2.zero();
@@ -33,7 +34,11 @@ class Food extends SpriteComponent with HasGameRef<SnakeGame> {
   @override
   void onMount() {
     super.onMount();
-    add(SizeEffect.to(Vector2.all(GameConfig.sizeCell),
-        CurvedEffectController(0.2, Curves.easeIn)));
+    add(
+      SizeEffect.to(
+        Vector2.all(GameConfig.sizeCell),
+        CurvedEffectController(0.2, Curves.easeIn),
+      ),
+    );
   }
 }

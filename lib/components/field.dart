@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/snake_game.dart';
 
@@ -18,26 +17,21 @@ class Field extends PositionComponent with HasGameRef<SnakeGame> {
     add(RectangleHitbox());
   }
 
-  Future<List<SpriteComponent>> getGridCells() async {
-    final List<SpriteComponent> tiles = [];
-
-    final rng = Random();
+  Future<List<RectangleComponent>> getGridCells() async {
+    final List<RectangleComponent> tiles = [];
 
     for (var c = 0; c < GameConfig.rows; c++) {
       for (var i = 0; i < GameConfig.columns; i++) {
         tiles.add(
-          SpriteComponent()
-            ..sprite = await Sprite.load(
-              'game_sprite.png',
-              srcSize: Vector2(GameConfig.sizeAsset, GameConfig.sizeAsset),
-              srcPosition: Vector2(
-                GameConfig.sizeAsset * 4,
-                rng.nextBool() ? 0 : GameConfig.sizeAsset,
-              ),
-            )
+          RectangleComponent()
             ..size = size = Vector2.all(GameConfig.sizeCell)
             ..position =
-                Vector2(i * GameConfig.sizeCell, c * GameConfig.sizeCell),
+                Vector2(i * GameConfig.sizeCell, c * GameConfig.sizeCell)
+            ..setColor(
+              (c.isEven && i.isEven) || (c.isOdd && i.isOdd)
+                  ? const Color(0xFFAAD750)
+                  : const Color(0xFFA3D148),
+            ),
         );
       }
     }
