@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/particles.dart';
 import 'package:flutter/material.dart';
 import 'package:snake_game/components/food.dart';
-import 'package:snake_game/components/ground.dart';
+import 'package:snake_game/components/ground/ground.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/snake_game.dart';
 
@@ -30,7 +30,7 @@ class SnakeHead extends SpriteComponent
   void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
     if (other is Food) {
-      game.onEatFood();
+      gameRef.gameManager.increaseScore();
     }
   }
 

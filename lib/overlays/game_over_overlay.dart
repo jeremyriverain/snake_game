@@ -42,7 +42,7 @@ class GameOverOverlay extends StatelessWidget {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          (game as SnakeGame).resetGame();
+                          (game as SnakeGame).playAgain();
                         },
                         style: ButtonStyle(
                           minimumSize: MaterialStateProperty.all(

@@ -36,6 +36,6 @@ class VirtualGrid {
   Vector2 toAbsolutePosition({
     required Vector2 virtualGridVector,
   }) {
-    return (gridPosition + virtualGridVector * sizeCell);
+    return (virtualGridVector * sizeCell);
   }
 }
