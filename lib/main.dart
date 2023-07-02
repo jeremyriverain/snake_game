@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'PressStart2P',
       ),
+      debugShowCheckedModeBanner: false,
       home: GameWidget(
         game: game,
         overlayBuilderMap: <String, Widget Function(BuildContext, Game)>{

@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:snake_game/main.dart';
 import 'package:snake_game/game_manager.dart';
 import 'package:snake_game/components/food.dart';
-import 'package:snake_game/components/field.dart';
+import 'package:snake_game/components/ground.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/components/snake/snake.dart';
 import 'package:snake_game/virtual_grid.dart';
@@ -19,11 +19,11 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   @override
   Color backgroundColor() => const Color(0xFF578B33);
 
-  late Field field;
+  late Ground ground;
   late Food food;
   late Snake snake;
 
-  initFood(Field field) {
+  initFood(Ground ground) {
     food = Food()
       ..position = virtualGrid.toAbsolutePosition(
             virtualGridVector: Vector2(9, 9),
@@ -31,7 +31,7 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
           Vector2.all(GameConfig.sizeCell / 2);
   }
 
-  initSnake(Field field) {
+  initSnake(Ground ground) {
     snake = Snake()
       ..position = virtualGrid.toAbsolutePosition(
         virtualGridVector: Vector2(3, 9),
@@ -41,7 +41,7 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   @override
   onLoad() async {
     overlays.add(MyApp.instructionsOverlay);
-    field = Field()
+    ground = Ground()
       ..position = Vector2(
         (size.x - GameConfig.columns * GameConfig.sizeCell) / 2,
         (size.y - GameConfig.rows * GameConfig.sizeCell) / 2,
@@ -51,11 +51,11 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
       sizeCell: GameConfig.sizeCell,
       columns: GameConfig.columns,
       rows: GameConfig.rows,
-      gridPosition: field.position,
+      gridPosition: ground.position,
     );
-    initFood(field);
-    initSnake(field);
-    addAll([field, food, snake]);
+    initFood(ground);
+    initSnake(ground);
+    addAll([ground, food, snake]);
   }
 
   void startGame() {
@@ -73,8 +73,8 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
     startGame();
     overlays.remove('gameOverOverlay');
     removeAll([snake, food]);
-    initFood(field);
-    initSnake(field);
+    initFood(ground);
+    initSnake(ground);
     addAll([food, snake]);
   }
 

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/snake_game.dart';
 
-class Field extends PositionComponent with HasGameRef<SnakeGame> {
+class Ground extends PositionComponent with HasGameRef<SnakeGame> {
   @override
   onLoad() async {
     addAll(await getGridCells());
