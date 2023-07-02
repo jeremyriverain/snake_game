@@ -19,5 +19,7 @@ jobs:
       - name: Install
         run: flutter pub get
       - name: Lint
-        run: |
-          flutter analyze
+        run: flutter analyze
+      - name: Test
+        run: flutter test
+      

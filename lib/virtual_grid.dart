@@ -13,7 +13,7 @@ class VirtualGrid {
     required this.gridPosition,
   });
 
-  List<Vector2> getAllCells() {
+  List<Vector2> getAllVectors() {
     final cells = <Vector2>[];
     for (var column = 0; column < columns; column++) {
       for (var row = 0; row < rows; row++) {
@@ -23,7 +23,7 @@ class VirtualGrid {
     return cells;
   }
 
-  Vector2 toVirtualGrid({
+  Vector2 toVirtualVector({
     required PositionComponent component,
   }) {
     return ((component.anchor.toOtherAnchorPosition(component.absolutePosition,
@@ -33,7 +33,7 @@ class VirtualGrid {
       ..floor();
   }
 
-  Vector2 toAbsolutePosition({
+  Vector2 toRelativePosition({
     required Vector2 virtualGridVector,
   }) {
     return (virtualGridVector * sizeCell);

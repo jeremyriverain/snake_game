@@ -19,10 +19,10 @@ class Ground extends PositionComponent with HasGameRef<SnakeGame> {
 
   Snake createSnake() => Snake()
     ..position =
-        virtualGrid.toAbsolutePosition(virtualGridVector: Vector2(3, 9));
+        virtualGrid.toRelativePosition(virtualGridVector: Vector2(3, 9));
 
   Food createFood(Vector2 position) => Food()
-    ..position = virtualGrid.toAbsolutePosition(
+    ..position = virtualGrid.toRelativePosition(
       virtualGridVector: position + Vector2(.5, .5),
     );
 
@@ -89,14 +89,14 @@ class Ground extends PositionComponent with HasGameRef<SnakeGame> {
   List<Vector2> getEmptyCells(Snake snake) {
     final filledCells = snake.bodyParts
         .map(
-          (element) => virtualGrid.toVirtualGrid(
+          (element) => virtualGrid.toVirtualVector(
             component: element,
           ),
         )
         .toList();
 
     return virtualGrid
-        .getAllCells()
+        .getAllVectors()
         .where((cell) => !filledCells.contains(cell))
         .toList();
   }
