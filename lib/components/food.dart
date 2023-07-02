@@ -3,9 +3,8 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/widgets.dart';
 import 'package:snake_game/game_config.dart';
-import 'package:snake_game/snake_game.dart';
 
-class Food extends SpriteComponent with HasGameRef<SnakeGame> {
+class Food extends SpriteComponent {
   Food()
       : super(
             size: Vector2.all(

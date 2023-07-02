@@ -5,15 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:snake_game/components/food.dart';
 import 'package:snake_game/components/ground/ground.dart';
 import 'package:snake_game/game_config.dart';
-import 'package:snake_game/snake_game.dart';
 
-class SnakeHead extends SpriteComponent
-    with HasGameRef<SnakeGame>, CollisionCallbacks {
-  SnakeHead()
-      : super(
+class SnakeHead extends SpriteComponent with CollisionCallbacks {
+  final void Function() whenEatFood;
+  final void Function() whenDead;
+
+  SnakeHead({
+    required this.whenEatFood,
+    required this.whenDead,
+  }) : super(
           size: Vector2.all(
             GameConfig.sizeCell,
           ),
+          anchor: Anchor.topRight,
         );
   @override
   onLoad() async {
@@ -30,7 +34,7 @@ class SnakeHead extends SpriteComponent
   void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
     if (other is Food) {
-      gameRef.gameManager.increaseScore();
+      whenEatFood();
     }
   }
 
@@ -48,7 +52,7 @@ class SnakeHead extends SpriteComponent
           ),
         ),
       );
-      game.gameOver();
+      whenDead();
     }
   }
 }

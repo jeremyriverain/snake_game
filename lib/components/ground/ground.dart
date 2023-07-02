@@ -19,7 +19,7 @@ class Ground extends PositionComponent with HasGameRef<SnakeGame> {
 
   Snake createSnake() => Snake()
     ..position =
-        virtualGrid.toRelativePosition(virtualGridVector: Vector2(3, 9));
+        virtualGrid.toRelativePosition(virtualGridVector: Vector2(4, 9));
 
   Food createFood(Vector2 position) => Food()
     ..position = virtualGrid.toRelativePosition(
@@ -28,12 +28,7 @@ class Ground extends PositionComponent with HasGameRef<SnakeGame> {
 
   @override
   onLoad() async {
-    game.gameManager.score.addListener(() {
-      if (game.gameManager.state != GameState.playing) {
-        return;
-      }
-      nextFood();
-    });
+    game.gameManager.score.addListener(onScoreUpdated);
 
     addAll(await getGridCells());
 
@@ -58,6 +53,11 @@ class Ground extends PositionComponent with HasGameRef<SnakeGame> {
     add(food);
   }
 
+  @override
+  onRemove() {
+    game.gameManager.score.removeListener(onScoreUpdated);
+  }
+
   Future<List<RectangleComponent>> getGridCells() async {
     final List<RectangleComponent> tiles = [];
 
@@ -76,6 +76,13 @@ class Ground extends PositionComponent with HasGameRef<SnakeGame> {
     }
 
     return tiles;
+  }
+
+  void onScoreUpdated() {
+    if (game.gameManager.state != GameState.playing) {
+      return;
+    }
+    nextFood();
   }
 
   void nextFood() {
