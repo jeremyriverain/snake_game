@@ -1,8 +1,10 @@
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:snake_game/blocs/score_bloc.dart';
 import 'package:snake_game/main.dart';
 import 'package:snake_game/managers/game_manager.dart';
 import 'package:snake_game/components/ground/ground.dart';
@@ -12,6 +14,11 @@ import 'package:snake_game/game_config.dart';
 class SnakeGame extends FlameGame
     with KeyboardEvents, HasCollisionDetection, DragCallbacks {
   final GameManager gameManager = GameManager();
+
+  final ScoreBloc scoreBloc;
+  SnakeGame({
+    required this.scoreBloc,
+  });
 
   @override
   Color backgroundColor() => const Color(0xFF578B33);
@@ -28,7 +35,19 @@ class SnakeGame extends FlameGame
   @override
   onLoad() async {
     overlays.add(MyApp.instructionsOverlay);
-    add(createGround());
+    await add(
+      FlameMultiBlocProvider(
+        providers: [
+          FlameBlocProvider<ScoreBloc, ScoreState>(
+            create: () => scoreBloc,
+          ),
+        ],
+        children: [
+          createGround(),
+          gameManager,
+        ],
+      ),
+    );
   }
 
   @override
@@ -80,8 +99,6 @@ class SnakeGame extends FlameGame
   void playAgain() {
     startGame();
     overlays.remove('gameOverOverlay');
-    removeWhere((component) => component is Ground);
-    add(createGround());
   }
 
   @override

@@ -1,6 +1,8 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:snake_game/blocs/score_bloc.dart';
 import 'package:snake_game/overlays/score_overlay.dart';
 import 'package:snake_game/snake_game.dart';
 import 'package:snake_game/overlays/game_over_overlay.dart';
@@ -14,7 +16,8 @@ void main() async {
   runApp(const MyApp());
 }
 
-final Game game = SnakeGame();
+final ScoreBloc scoreBloc = ScoreBloc();
+final Game game = SnakeGame(scoreBloc: scoreBloc);
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -32,16 +35,23 @@ class MyApp extends StatelessWidget {
         fontFamily: 'PressStart2P',
       ),
       debugShowCheckedModeBanner: false,
-      home: GameWidget(
-        game: game,
-        overlayBuilderMap: <String, Widget Function(BuildContext, Game)>{
-          instructionsOverlay: (context, game) => InstructionsOverlay(game),
-          gameOverOverlay: (context, game) => GameOverOverlay(game),
-          scoreOverlay: (context, game) => ScoreOverlay(game),
-        },
-        initialActiveOverlays: const [
-          scoreOverlay,
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider<ScoreBloc>(
+            create: (BuildContext context) => scoreBloc,
+          ),
         ],
+        child: GameWidget(
+          game: game,
+          overlayBuilderMap: <String, Widget Function(BuildContext, Game)>{
+            instructionsOverlay: (context, game) => InstructionsOverlay(game),
+            gameOverOverlay: (context, game) => GameOverOverlay(game),
+            scoreOverlay: (context, game) => ScoreOverlay(game),
+          },
+          initialActiveOverlays: const [
+            scoreOverlay,
+          ],
+        ),
       ),
     );
   }

@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:snake_game/blocs/score_bloc.dart';
 import 'package:snake_game/components/food.dart';
 import 'package:snake_game/components/ground/cell.dart';
 import 'package:snake_game/components/snake/snake.dart';
@@ -11,7 +13,8 @@ import 'package:snake_game/managers/game_manager.dart';
 import 'package:snake_game/snake_game.dart';
 import 'package:snake_game/virtual_grid.dart';
 
-class Ground extends PositionComponent with HasGameRef<SnakeGame> {
+class Ground extends PositionComponent
+    with HasGameRef<SnakeGame>, FlameBlocReader<ScoreBloc, ScoreState> {
   late final VirtualGrid virtualGrid;
 
   Snake snake = Snake();
@@ -28,7 +31,7 @@ class Ground extends PositionComponent with HasGameRef<SnakeGame> {
 
   @override
   onLoad() async {
-    game.gameManager.score.addListener(onScoreUpdated);
+    super.onLoad();
 
     addAll(await getGridCells());
 
@@ -46,16 +49,33 @@ class Ground extends PositionComponent with HasGameRef<SnakeGame> {
 
     add(RectangleHitbox());
 
+    await add(
+      FlameBlocListener<ScoreBloc, ScoreState>(
+        onNewState: (state) {
+          if (game.gameManager.state != GameState.playing) {
+            return;
+          }
+
+          if (bloc.state.score != 0) {
+            onScoreUpdated();
+          } else {
+            removeWhere((component) => component is Snake);
+            snake = createSnake();
+            add(snake);
+
+            removeWhere((component) => component is Food);
+            food = createFood(Vector2(9, 9));
+            add(food);
+          }
+        },
+      ),
+    );
+
     snake = createSnake();
     add(snake);
 
     food = createFood(Vector2(9, 9));
     add(food);
-  }
-
-  @override
-  onRemove() {
-    game.gameManager.score.removeListener(onScoreUpdated);
   }
 
   Future<List<RectangleComponent>> getGridCells() async {
