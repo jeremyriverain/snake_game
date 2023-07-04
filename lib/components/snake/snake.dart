@@ -1,14 +1,15 @@
-import 'dart:async';
-
 import 'package:flame/components.dart';
-// import 'package:flame/effects.dart';
-// import 'package:snake_game/game_config.dart';
-// import 'package:snake_game/components/snake/snake_body_part.dart';
+import 'package:flame_bloc/flame_bloc.dart';
+import 'package:snake_game/blocs/snake_direction_bloc.dart';
 import 'package:snake_game/components/snake/snake_head.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/snake_game.dart';
+import 'package:snake_game/utils/direction_util.dart';
 
-class Snake extends PositionComponent with HasGameRef<SnakeGame> {
+class Snake extends PositionComponent
+    with
+        HasGameRef<SnakeGame>,
+        FlameBlocReader<SnakeDirectionBloc, SnakeDirectionState> {
   final List<PositionComponent> bodyParts = [];
 
   Snake() : super(priority: 1);
@@ -16,7 +17,8 @@ class Snake extends PositionComponent with HasGameRef<SnakeGame> {
   Vector2 defaultDirection = Vector2(GameConfig.speed, 0);
 
   @override
-  FutureOr<void> onLoad() {
+  onLoad() async {
+    super.onLoad();
     bodyParts.addAll([
       // SnakeBodyPart()
       //   ..position = -Vector2(
@@ -63,7 +65,7 @@ class Snake extends PositionComponent with HasGameRef<SnakeGame> {
   @override
   void update(double dt) {
     if (gameRef.gameManager.isPlaying) {
-      position += defaultDirection * dt;
+      position += DirectionUtil.directionToVector(bloc.state.direction) * dt;
     }
   }
 }

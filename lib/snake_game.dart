@@ -5,11 +5,11 @@ import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:snake_game/blocs/score_bloc.dart';
+import 'package:snake_game/blocs/snake_direction_bloc.dart';
 import 'package:snake_game/main.dart';
 import 'package:snake_game/managers/game_manager.dart';
 import 'package:snake_game/components/ground/ground.dart';
 import 'package:snake_game/game_config.dart';
-// import 'package:snake_game/managers/direction_manager.dart';
 
 class SnakeGame extends FlameGame
     with KeyboardEvents, HasCollisionDetection, DragCallbacks {
@@ -19,6 +19,8 @@ class SnakeGame extends FlameGame
   SnakeGame({
     required this.scoreBloc,
   });
+
+  final SnakeDirectionBloc snakeDirectionBloc = SnakeDirectionBloc();
 
   @override
   Color backgroundColor() => const Color(0xFF578B33);
@@ -40,6 +42,9 @@ class SnakeGame extends FlameGame
         providers: [
           FlameBlocProvider<ScoreBloc, ScoreState>(
             create: () => scoreBloc,
+          ),
+          FlameBlocProvider<SnakeDirectionBloc, SnakeDirectionState>(
+            create: () => snakeDirectionBloc,
           ),
         ],
         children: [
@@ -69,10 +74,11 @@ class SnakeGame extends FlameGame
     final dragLastPosition = this.dragLastPosition;
 
     if (dragLastPosition != null && dragStartPosition != null) {
-      // print(
-      //   DirectionManager.vectorsToDirection(
-      //       dragStartPosition, dragLastPosition),
-      // );
+      snakeDirectionBloc.add(
+        MoveEvent(
+            dragStartPosition: dragStartPosition,
+            dragLastPosition: dragLastPosition),
+      );
     }
     this.dragStartPosition = null;
     this.dragLastPosition = null;

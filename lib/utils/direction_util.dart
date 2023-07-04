@@ -1,7 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:snake_game/game_config.dart';
 
-class DirectionManager {
+class DirectionUtil {
   static Direction vectorsToDirection(Vector2 start, Vector2 end) {
     final delta = end - start;
     final isHorizontal = delta.x.abs() > delta.y.abs();

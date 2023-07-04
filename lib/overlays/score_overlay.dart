@@ -36,7 +36,6 @@ class ScoreOverlay extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.white,
                   fontSize: 20,
-                  letterSpacing: -7,
                 ),
           ),
         ],
