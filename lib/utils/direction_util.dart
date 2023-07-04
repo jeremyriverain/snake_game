@@ -1,4 +1,5 @@
 import 'package:flame/game.dart';
+import 'package:flutter/services.dart';
 import 'package:snake_game/game_config.dart';
 
 class DirectionUtil {
@@ -18,6 +19,30 @@ class DirectionUtil {
       Direction.left => Vector2(-GameConfig.speed, 0),
       Direction.right => Vector2(GameConfig.speed, 0),
     };
+  }
+
+  static Direction? keyboardToDirection(Set<LogicalKeyboardKey> keysPressed) {
+    final isArrowDown = keysPressed.contains(LogicalKeyboardKey.arrowDown);
+    if (isArrowDown) {
+      return Direction.down;
+    }
+
+    final isArrowLeft = keysPressed.contains(LogicalKeyboardKey.arrowLeft);
+    if (isArrowLeft) {
+      return Direction.left;
+    }
+
+    final isArrowUp = keysPressed.contains(LogicalKeyboardKey.arrowUp);
+    if (isArrowUp) {
+      return Direction.up;
+    }
+    final isArrowRight = keysPressed.contains(LogicalKeyboardKey.arrowRight);
+
+    if (isArrowRight) {
+      return Direction.right;
+    }
+
+    return null;
   }
 }
 

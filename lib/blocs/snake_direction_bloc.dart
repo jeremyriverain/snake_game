@@ -4,12 +4,19 @@ import 'package:snake_game/utils/direction_util.dart';
 
 abstract class SnakeDirectionEvent {}
 
-class MoveEvent extends SnakeDirectionEvent {
+class DragScreenEvent extends SnakeDirectionEvent {
   final Vector2 dragStartPosition;
   final Vector2 dragLastPosition;
-  MoveEvent({
+  DragScreenEvent({
     required this.dragStartPosition,
     required this.dragLastPosition,
+  });
+}
+
+class MoveEvent extends SnakeDirectionEvent {
+  final Direction direction;
+  MoveEvent({
+    required this.direction,
   });
 }
 
@@ -28,13 +35,20 @@ class SnakeDirectionBloc
             direction: Direction.right,
           ),
         ) {
-    on<MoveEvent>((event, emit) {
+    on<DragScreenEvent>((event, emit) {
       emit(
         SnakeDirectionState(
           direction: DirectionUtil.vectorsToDirection(
             event.dragStartPosition,
             event.dragLastPosition,
           ),
+        ),
+      );
+    });
+    on<MoveEvent>((event, emit) {
+      emit(
+        SnakeDirectionState(
+          direction: event.direction,
         ),
       );
     });

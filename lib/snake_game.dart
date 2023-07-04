@@ -10,6 +10,7 @@ import 'package:snake_game/main.dart';
 import 'package:snake_game/managers/game_manager.dart';
 import 'package:snake_game/components/ground/ground.dart';
 import 'package:snake_game/game_config.dart';
+import 'package:snake_game/utils/direction_util.dart';
 
 class SnakeGame extends FlameGame
     with KeyboardEvents, HasCollisionDetection, DragCallbacks {
@@ -75,9 +76,10 @@ class SnakeGame extends FlameGame
 
     if (dragLastPosition != null && dragStartPosition != null) {
       snakeDirectionBloc.add(
-        MoveEvent(
-            dragStartPosition: dragStartPosition,
-            dragLastPosition: dragLastPosition),
+        DragScreenEvent(
+          dragStartPosition: dragStartPosition,
+          dragLastPosition: dragLastPosition,
+        ),
       );
     }
     this.dragStartPosition = null;
@@ -118,16 +120,14 @@ class SnakeGame extends FlameGame
       return KeyEventResult.ignored;
     }
 
-    final isArrowDown = keysPressed.contains(LogicalKeyboardKey.arrowDown);
-    final isArrowLeft = keysPressed.contains(LogicalKeyboardKey.arrowLeft);
-    final isArrowUp = keysPressed.contains(LogicalKeyboardKey.arrowUp);
-    final isArrowRight = keysPressed.contains(LogicalKeyboardKey.arrowRight);
+    final direction = DirectionUtil.keyboardToDirection(keysPressed);
 
-    if (!isArrowDown && !isArrowLeft && !isArrowUp && !isArrowRight) {
+    if (direction == null) {
       return KeyEventResult.ignored;
     }
 
     if (gameManager.isPlaying) {
+      snakeDirectionBloc.add(MoveEvent(direction: direction));
     } else if (gameManager.isIntro) {
       startGame();
     }
