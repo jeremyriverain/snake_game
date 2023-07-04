@@ -3,4 +3,5 @@ class GameConfig {
   static const columns = 12;
   static const double sizeCellAsset = 384;
   static const double sizeCell = 27;
+  static const double speed = 150;
 }

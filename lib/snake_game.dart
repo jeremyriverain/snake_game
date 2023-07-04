@@ -1,17 +1,23 @@
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:snake_game/main.dart';
-import 'package:snake_game/game_manager.dart';
+import 'package:snake_game/managers/game_manager.dart';
 import 'package:snake_game/components/ground/ground.dart';
 import 'package:snake_game/game_config.dart';
+// import 'package:snake_game/managers/direction_manager.dart';
 
-class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
+class SnakeGame extends FlameGame
+    with KeyboardEvents, HasCollisionDetection, DragCallbacks {
   final GameManager gameManager = GameManager();
 
   @override
   Color backgroundColor() => const Color(0xFF578B33);
+
+  Vector2? dragStartPosition;
+  Vector2? dragLastPosition;
 
   Ground createGround() => Ground()
     ..position = Vector2(
@@ -23,6 +29,41 @@ class SnakeGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
   onLoad() async {
     overlays.add(MyApp.instructionsOverlay);
     add(createGround());
+  }
+
+  @override
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    dragStartPosition = event.localPosition;
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    super.onDragUpdate(event);
+    dragLastPosition = event.localPosition;
+  }
+
+  @override
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    final dragStartPosition = this.dragStartPosition;
+    final dragLastPosition = this.dragLastPosition;
+
+    if (dragLastPosition != null && dragStartPosition != null) {
+      // print(
+      //   DirectionManager.vectorsToDirection(
+      //       dragStartPosition, dragLastPosition),
+      // );
+    }
+    this.dragStartPosition = null;
+    this.dragLastPosition = null;
+  }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    dragStartPosition = null;
+    dragLastPosition = null;
   }
 
   void startGame() {
