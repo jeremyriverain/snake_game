@@ -2,6 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:snake_game/blocs/game_flow_bloc.dart';
 import 'package:snake_game/blocs/score_bloc.dart';
 import 'package:snake_game/overlays/score_overlay.dart';
 import 'package:snake_game/snake_game.dart';
@@ -17,7 +18,8 @@ void main() async {
 }
 
 final ScoreBloc scoreBloc = ScoreBloc();
-final Game game = SnakeGame(scoreBloc: scoreBloc);
+final GameFlowBloc gameFlowBloc = GameFlowBloc();
+final Game game = SnakeGame(scoreBloc: scoreBloc, gameFlowBloc: gameFlowBloc);
 
 class MyApp extends StatelessWidget {
   const MyApp({

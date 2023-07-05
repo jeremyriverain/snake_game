@@ -4,24 +4,24 @@ import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:snake_game/blocs/game_flow_bloc.dart';
 import 'package:snake_game/blocs/score_bloc.dart';
 import 'package:snake_game/blocs/snake_bloc.dart';
 import 'package:snake_game/main.dart';
-import 'package:snake_game/game_manager.dart';
 import 'package:snake_game/components/ground/ground.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/utils/direction_util.dart';
 
 class SnakeGame extends FlameGame
     with KeyboardEvents, HasCollisionDetection, DragCallbacks {
-  final GameManager gameManager = GameManager();
-
   final ScoreBloc scoreBloc;
+  final GameFlowBloc gameFlowBloc;
   SnakeGame({
     required this.scoreBloc,
+    required this.gameFlowBloc,
   });
 
-  final SnakeBloc snakeDirectionBloc = SnakeBloc();
+  final SnakeBloc snakeBloc = SnakeBloc();
 
   @override
   Color backgroundColor() => const Color(0xFF578B33);
@@ -44,13 +44,15 @@ class SnakeGame extends FlameGame
           FlameBlocProvider<ScoreBloc, ScoreState>(
             create: () => scoreBloc,
           ),
+          FlameBlocProvider<GameFlowBloc, GameFlowState>(
+            create: () => gameFlowBloc,
+          ),
           FlameBlocProvider<SnakeBloc, SnakeState>(
-            create: () => snakeDirectionBloc,
+            create: () => snakeBloc,
           ),
         ],
         children: [
           createGround(),
-          gameManager,
         ],
       ),
     );
@@ -75,7 +77,7 @@ class SnakeGame extends FlameGame
     final dragLastPosition = this.dragLastPosition;
 
     if (dragLastPosition != null && dragStartPosition != null) {
-      snakeDirectionBloc.add(
+      snakeBloc.add(
         DragScreenEvent(
           dragStartPosition: dragStartPosition,
           dragLastPosition: dragLastPosition,
@@ -94,19 +96,24 @@ class SnakeGame extends FlameGame
   }
 
   void startGame() {
-    gameManager.reset();
-    gameManager.state = GameState.playing;
+    scoreBloc.add(ResetScore());
+    gameFlowBloc.add(PlayEvent());
     overlays.remove(MyApp.instructionsOverlay);
   }
 
   void gameOver() {
-    gameManager.state = GameState.gameOver;
+    gameFlowBloc.add(LoseEvent());
     overlays.add(MyApp.gameOverOverlay);
+    snakeBloc.add(ResetSnakeEvent());
   }
 
   void playAgain() {
     startGame();
     overlays.remove('gameOverOverlay');
+  }
+
+  void onEatFood() {
+    scoreBloc.add(IncrementScore());
   }
 
   @override
@@ -116,7 +123,7 @@ class SnakeGame extends FlameGame
   ) {
     final isKeyDown = event is RawKeyDownEvent;
 
-    if (gameManager.isGameOver || !isKeyDown) {
+    if (gameFlowBloc.state.gameState == GameState.gameOver || !isKeyDown) {
       return KeyEventResult.ignored;
     }
 
@@ -126,9 +133,9 @@ class SnakeGame extends FlameGame
       return KeyEventResult.ignored;
     }
 
-    if (gameManager.isPlaying) {
-      snakeDirectionBloc.add(TapArrowKeyEvent(directionRequested: direction));
-    } else if (gameManager.isIntro) {
+    if (gameFlowBloc.state.gameState == GameState.playing) {
+      snakeBloc.add(TapArrowKeyEvent(directionRequested: direction));
+    } else if (gameFlowBloc.state.gameState == GameState.intro) {
       startGame();
     }
     return KeyEventResult.handled;

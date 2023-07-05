@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:snake_game/game_config.dart';
 
 class GridUtil {
   final double sizeCell;
@@ -39,17 +38,4 @@ class GridUtil {
   }) {
     return ((virtualGridVector + Vector2.all(.5)) * sizeCell);
   }
-
-  static bool hasMovedToNextCell({
-    required Vector2 previousCell,
-    required Vector2 nextCell,
-  }) {
-    final isXAxisOverflowed = nextCell.x - previousCell.x > GameConfig.sizeCell;
-    final isYAxisOverflowed = nextCell.y - previousCell.y > GameConfig.sizeCell;
-    return isXAxisOverflowed || isYAxisOverflowed;
-  }
-
-  // static Vector2 normalizeVector(Vector2 vector) {
-  //   return Vector2(vector.x.floorToDouble(), vector.y.floorToDouble());
-  // }
 }

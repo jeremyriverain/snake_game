@@ -1,22 +1,21 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/particles.dart';
-import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:snake_game/blocs/snake_bloc.dart';
 import 'package:snake_game/components/food.dart';
 import 'package:snake_game/components/ground/cell.dart';
 import 'package:snake_game/components/ground/ground.dart';
 import 'package:snake_game/game_config.dart';
 
-class SnakeHead extends SpriteComponent
-    with CollisionCallbacks, FlameBlocReader<SnakeBloc, SnakeState> {
+class SnakeHead extends SpriteComponent with CollisionCallbacks {
   final void Function() whenEatFood;
   final void Function() whenDead;
+  final void Function() whenCollideCell;
 
   SnakeHead({
     required this.whenEatFood,
     required this.whenDead,
+    required this.whenCollideCell,
   }) : super(
           size: Vector2.all(
             GameConfig.sizeCell,
@@ -37,7 +36,7 @@ class SnakeHead extends SpriteComponent
     add(RectangleHitbox(
       size: sizeHitbox,
       position: Vector2(
-        0,
+        2,
         (GameConfig.sizeCell - sizeHitbox.y) / 2,
       ),
     ));
@@ -50,7 +49,7 @@ class SnakeHead extends SpriteComponent
       whenEatFood();
     }
     if (other is Cell) {
-      bloc.add(CollideCellEvent());
+      whenCollideCell();
     }
   }
 

@@ -35,7 +35,7 @@ class Food extends SpriteComponent {
     super.onMount();
     add(
       SizeEffect.to(
-        Vector2.all(GameConfig.sizeCell),
+        Vector2.all(GameConfig.sizeCell - 3),
         CurvedEffectController(0.2, Curves.easeIn),
       ),
     );

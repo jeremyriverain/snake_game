@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class ScoreEvent {}
 
-class IncrementStore extends ScoreEvent {}
+class IncrementScore extends ScoreEvent {}
 
 class ResetScore extends ScoreEvent {}
 
@@ -24,7 +24,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       : super(
           ScoreState(score: 0),
         ) {
-    on<IncrementStore>(
+    on<IncrementScore>(
       (event, emit) => emit(
         ScoreState(score: state.score + 1),
       ),

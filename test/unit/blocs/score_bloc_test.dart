@@ -15,7 +15,7 @@ void main() {
     blocTest(
       'IncrementStore',
       build: () => ScoreBloc(),
-      act: (bloc) => bloc.add(IncrementStore()),
+      act: (bloc) => bloc.add(IncrementScore()),
       expect: () => [ScoreState(score: 1)],
     );
 

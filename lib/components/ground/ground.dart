@@ -4,17 +4,15 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:snake_game/blocs/game_flow_bloc.dart';
 import 'package:snake_game/blocs/score_bloc.dart';
 import 'package:snake_game/components/food.dart';
 import 'package:snake_game/components/ground/cell.dart';
 import 'package:snake_game/components/snake/snake.dart';
 import 'package:snake_game/game_config.dart';
-import 'package:snake_game/game_manager.dart';
-import 'package:snake_game/snake_game.dart';
 import 'package:snake_game/utils/grid_util.dart';
 
-class Ground extends PositionComponent
-    with HasGameRef<SnakeGame>, FlameBlocReader<ScoreBloc, ScoreState> {
+class Ground extends PositionComponent {
   late final GridUtil virtualGrid;
 
   Snake snake = Snake();
@@ -50,23 +48,30 @@ class Ground extends PositionComponent
     add(RectangleHitbox());
 
     await add(
-      FlameBlocListener<ScoreBloc, ScoreState>(
+      FlameBlocListener<GameFlowBloc, GameFlowState>(
+        listenWhen: (previousState, newState) {
+          return previousState.gameState == GameState.gameOver &&
+              newState.gameState == GameState.playing;
+        },
         onNewState: (state) {
-          if (game.gameManager.state != GameState.playing) {
-            return;
-          }
+          removeWhere((component) => component is Snake);
+          snake = createSnake();
+          add(snake);
 
-          if (bloc.state.score != 0) {
-            onScoreUpdated();
-          } else {
-            removeWhere((component) => component is Snake);
-            snake = createSnake();
-            add(snake);
+          removeWhere((component) => component is Food);
+          food = createFood(Vector2(9, 9));
+          add(food);
+        },
+      ),
+    );
 
-            removeWhere((component) => component is Food);
-            food = createFood(Vector2(9, 9));
-            add(food);
-          }
+    await add(
+      FlameBlocListener<ScoreBloc, ScoreState>(
+        listenWhen: (previousState, newState) {
+          return newState.score != 0;
+        },
+        onNewState: (state) {
+          nextFood();
         },
       ),
     );
@@ -96,13 +101,6 @@ class Ground extends PositionComponent
     }
 
     return tiles;
-  }
-
-  void onScoreUpdated() {
-    if (game.gameManager.state != GameState.playing) {
-      return;
-    }
-    nextFood();
   }
 
   void nextFood() {

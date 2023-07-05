@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
+import 'package:snake_game/blocs/game_flow_bloc.dart';
 import 'package:snake_game/blocs/snake_bloc.dart';
 import 'package:snake_game/components/snake/snake_head.dart';
 import 'package:snake_game/game_config.dart';
@@ -19,9 +20,10 @@ class Snake extends PositionComponent
   @override
   onLoad() async {
     super.onLoad();
-    final snake = SnakeHead(
+    final head = SnakeHead(
       whenEatFood: whenEatFood,
       whenDead: whenDead,
+      whenCollideCell: whenCollideCell,
     );
     bodyParts.addAll([
       // SnakeBodyPart()
@@ -34,7 +36,7 @@ class Snake extends PositionComponent
       //     GameConfig.sizeCell,
       //     0,
       //   ),
-      snake,
+      head,
     ]);
 
     addAll(bodyParts);
@@ -42,6 +44,10 @@ class Snake extends PositionComponent
 
   void whenDead() {
     gameRef.gameOver();
+  }
+
+  void whenCollideCell() {
+    bloc.add(CollideCellEvent());
   }
 
   void whenEatFood() {
@@ -60,12 +66,12 @@ class Snake extends PositionComponent
     //   ));
     // bodyParts.add(bodyPart);
     // add(bodyPart);
-    gameRef.gameManager.increaseScore();
+    gameRef.onEatFood();
   }
 
   @override
   void update(double dt) {
-    if (gameRef.gameManager.isPlaying) {
+    if (gameRef.gameFlowBloc.state.gameState == GameState.playing) {
       final head = bodyParts.last;
       head.position +=
           DirectionUtil.directionToVector(bloc.state.direction) * dt;

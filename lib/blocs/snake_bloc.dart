@@ -22,6 +22,8 @@ class TapArrowKeyEvent extends SnakeEvent {
 
 class CollideCellEvent extends SnakeEvent {}
 
+class ResetSnakeEvent extends SnakeEvent {}
+
 class SnakeState {
   final Direction direction;
   final Direction? directionRequested;
@@ -41,13 +43,12 @@ class SnakeState {
   }
 }
 
+final initialState = SnakeState(
+  direction: Direction.right,
+);
+
 class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
-  SnakeBloc()
-      : super(
-          SnakeState(
-            direction: Direction.right,
-          ),
-        ) {
+  SnakeBloc() : super(initialState) {
     on<DragScreenEvent>((event, emit) {
       final directionRequested = DirectionUtil.vectorsToDirection(
         event.dragStartPosition,
@@ -71,5 +72,7 @@ class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
     on<CollideCellEvent>((event, emit) {
       emit(state.copyWith(direction: state.directionRequested));
     });
+
+    on<ResetSnakeEvent>((event, emit) => emit(initialState));
   }
 }
