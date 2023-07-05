@@ -36,22 +36,22 @@ class MoveEvent extends SnakeEvent {
 
 class SnakeState {
   final Direction direction;
-  final List<List<Effect>> bodyPartsEffects;
+  final List<List<Effect>> headMovements;
   final int lengthSnake;
   SnakeState({
     required this.direction,
-    required this.bodyPartsEffects,
+    required this.headMovements,
     required this.lengthSnake,
   });
 
   SnakeState copyWith({
     Direction? direction,
-    List<List<Effect>>? bodyPartsEffects,
+    List<List<Effect>>? headMovements,
     int? lengthSnake,
   }) {
     return SnakeState(
       direction: direction ?? this.direction,
-      bodyPartsEffects: bodyPartsEffects ?? this.bodyPartsEffects,
+      headMovements: headMovements ?? this.headMovements,
       lengthSnake: lengthSnake ?? this.lengthSnake,
     );
   }
@@ -59,7 +59,7 @@ class SnakeState {
 
 final initialState = SnakeState(
   direction: Direction.right,
-  bodyPartsEffects: [],
+  headMovements: [],
   lengthSnake: GameConfig.lengthSnake,
 );
 
@@ -90,9 +90,7 @@ class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
     on<MoveEvent>((event, emit) {
       emit(
         state.copyWith(
-          bodyPartsEffects: [
-            event.effect,
-          ],
+          headMovements: state.headMovements..add(event.effect),
         ),
       );
     });

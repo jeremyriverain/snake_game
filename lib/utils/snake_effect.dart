@@ -3,14 +3,12 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/widgets.dart';
-import 'package:snake_game/blocs/game_flow_bloc.dart';
 import 'package:snake_game/blocs/snake_bloc.dart';
 import 'package:snake_game/utils/direction_util.dart';
 
 class SnakeEffect {
-  static List<Effect> createEffect({
+  static List<Effect> createHeadEffect({
     required SnakeBloc snakeBloc,
-    required GameFlowBloc gameFlowBloc,
     required PositionComponent component,
     required Direction direction,
     required Direction previousDirection,
@@ -23,15 +21,12 @@ class SnakeEffect {
           curve: Curves.linear,
         ),
         onComplete: () {
-          if (gameFlowBloc.state.gameState == GameState.playing) {
-            component.addAll(createEffect(
-              snakeBloc: snakeBloc,
-              gameFlowBloc: gameFlowBloc,
-              component: component,
-              direction: snakeBloc.state.direction,
-              previousDirection: direction,
-            ));
-          }
+          component.addAll(createHeadEffect(
+            snakeBloc: snakeBloc,
+            component: component,
+            direction: snakeBloc.state.direction,
+            previousDirection: direction,
+          ));
         },
       )..removeOnFinish = true,
       RotateEffect.by(
@@ -44,6 +39,25 @@ class SnakeEffect {
           curve: Curves.linear,
         ),
       )
+    ];
+  }
+
+  static List<Effect> createBodyEffect({
+    required PositionComponent component,
+  }) {
+    return [
+      MoveByEffect(
+        DirectionUtil.directionToVector(Direction.right),
+        EffectController(
+          duration: .4,
+          curve: Curves.linear,
+        ),
+        onComplete: () {
+          component.addAll(createBodyEffect(
+            component: component,
+          ));
+        },
+      )..removeOnFinish = true,
     ];
   }
 
