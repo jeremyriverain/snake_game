@@ -17,7 +17,7 @@ class SnakeHead extends SpriteComponent with CollisionCallbacks {
           size: Vector2.all(
             GameConfig.sizeCell,
           ),
-          anchor: Anchor.topRight,
+          anchor: Anchor.center,
         );
   @override
   onLoad() async {

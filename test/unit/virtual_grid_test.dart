@@ -45,15 +45,15 @@ void main() {
       );
     });
 
-    test('toAbsolutePosition', () {
+    test('toRelativePosition', () {
       expect(
         grid.toRelativePosition(virtualGridVector: Vector2(0, 0)),
-        Vector2(0, 0),
+        Vector2(5, 5),
       );
 
       expect(
         grid.toRelativePosition(virtualGridVector: Vector2(1, 2)),
-        Vector2(10, 20),
+        Vector2(15, 25),
       );
     });
   });

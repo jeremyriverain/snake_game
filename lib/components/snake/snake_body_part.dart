@@ -7,7 +7,7 @@ class SnakeBodyPart extends SpriteComponent {
           size: Vector2.all(
             GameConfig.sizeCell,
           ),
-          anchor: Anchor.topRight,
+          anchor: Anchor.center,
         );
 
   @override

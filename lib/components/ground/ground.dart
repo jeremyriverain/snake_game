@@ -26,7 +26,7 @@ class Ground extends PositionComponent
 
   Food createFood(Vector2 position) => Food()
     ..position = virtualGrid.toRelativePosition(
-      virtualGridVector: position + Vector2(.5, .5),
+      virtualGridVector: position,
     );
 
   @override

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:snake_game/blocs/snake_direction_bloc.dart';
@@ -65,7 +67,18 @@ class Snake extends PositionComponent
   @override
   void update(double dt) {
     if (gameRef.gameManager.isPlaying) {
-      position += DirectionUtil.directionToVector(bloc.state.direction) * dt;
+      bodyParts.last.position +=
+          DirectionUtil.directionToVector(bloc.state.direction) * dt;
+      bodyParts.last.angle = getHeadAngle(bloc.state.direction);
     }
+  }
+
+  double getHeadAngle(Direction direction) {
+    return switch (direction) {
+      Direction.down => pi / 2,
+      Direction.up => 3 * pi / 2,
+      Direction.right => 0,
+      Direction.left => pi,
+    };
   }
 }
