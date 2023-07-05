@@ -38,7 +38,6 @@ class Snake extends PositionComponent
     ]);
 
     addAll(bodyParts);
-    bloc.add(MoveHeadEvent(position: snake.position));
   }
 
   void whenDead() {
@@ -70,7 +69,6 @@ class Snake extends PositionComponent
       final head = bodyParts.last;
       head.position +=
           DirectionUtil.directionToVector(bloc.state.direction) * dt;
-      bloc.add(MoveHeadEvent(position: head.position));
       head.angle = getHeadAngle(bloc.state.direction);
     }
   }

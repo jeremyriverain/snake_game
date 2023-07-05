@@ -14,33 +14,29 @@ class DragScreenEvent extends SnakeEvent {
 }
 
 class TapArrowKeyEvent extends SnakeEvent {
-  final Direction direction;
+  final Direction directionRequested;
   TapArrowKeyEvent({
-    required this.direction,
+    required this.directionRequested,
   });
 }
 
-class MoveHeadEvent extends SnakeEvent {
-  final Vector2 position;
-
-  MoveHeadEvent({required this.position});
-}
+class CollideCellEvent extends SnakeEvent {}
 
 class SnakeState {
   final Direction direction;
-  final Vector2 headPosition;
+  final Direction? directionRequested;
   SnakeState({
     required this.direction,
-    required this.headPosition,
+    this.directionRequested,
   });
 
   SnakeState copyWith({
     Direction? direction,
-    Vector2? headPosition,
+    Direction? directionRequested,
   }) {
     return SnakeState(
       direction: direction ?? this.direction,
-      headPosition: headPosition ?? this.headPosition,
+      directionRequested: directionRequested ?? this.directionRequested,
     );
   }
 }
@@ -50,7 +46,6 @@ class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
       : super(
           SnakeState(
             direction: Direction.right,
-            headPosition: Vector2.zero(),
           ),
         ) {
     on<DragScreenEvent>((event, emit) {
@@ -63,18 +58,18 @@ class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
           DirectionUtil.getForbiddenDirectionOf(state.direction)) {
         return;
       }
-      emit(state.copyWith(direction: directionRequested));
+      emit(state.copyWith(directionRequested: directionRequested));
     });
     on<TapArrowKeyEvent>((event, emit) {
-      if (event.direction ==
+      if (event.directionRequested ==
           DirectionUtil.getForbiddenDirectionOf(state.direction)) {
         return;
       }
-      emit(state.copyWith(direction: event.direction));
+      emit(state.copyWith(directionRequested: event.directionRequested));
     });
 
-    on<MoveHeadEvent>((event, emit) {
-      emit(state.copyWith(headPosition: event.position));
+    on<CollideCellEvent>((event, emit) {
+      emit(state.copyWith(direction: state.directionRequested));
     });
   }
 }

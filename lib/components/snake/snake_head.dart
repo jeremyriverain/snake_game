@@ -1,13 +1,16 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/particles.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:snake_game/blocs/snake_bloc.dart';
 import 'package:snake_game/components/food.dart';
 import 'package:snake_game/components/ground/cell.dart';
 import 'package:snake_game/components/ground/ground.dart';
 import 'package:snake_game/game_config.dart';
 
-class SnakeHead extends SpriteComponent with CollisionCallbacks {
+class SnakeHead extends SpriteComponent
+    with CollisionCallbacks, FlameBlocReader<SnakeBloc, SnakeState> {
   final void Function() whenEatFood;
   final void Function() whenDead;
 
@@ -22,6 +25,7 @@ class SnakeHead extends SpriteComponent with CollisionCallbacks {
         );
   @override
   onLoad() async {
+    super.onLoad();
     sprite = await Sprite.load(
       'game_sprite.png',
       srcSize: Vector2(GameConfig.sizeCellAsset, GameConfig.sizeCellAsset),
@@ -33,7 +37,7 @@ class SnakeHead extends SpriteComponent with CollisionCallbacks {
     add(RectangleHitbox(
       size: sizeHitbox,
       position: Vector2(
-        GameConfig.sizeCell - sizeHitbox.x,
+        0,
         (GameConfig.sizeCell - sizeHitbox.y) / 2,
       ),
     ));
@@ -45,15 +49,15 @@ class SnakeHead extends SpriteComponent with CollisionCallbacks {
     if (other is Food) {
       whenEatFood();
     }
+    if (other is Cell) {
+      bloc.add(CollideCellEvent());
+    }
   }
 
   @override
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is Cell) {
-      // print('cell');
-    }
     if (other is Ground) {
       add(
         ParticleSystemComponent(

@@ -14,6 +14,10 @@ class Cell extends RectangleComponent {
           position: position,
         ) {
     setColor(color);
-    add(RectangleHitbox(collisionType: CollisionType.passive));
+    add(
+      RectangleHitbox(
+        collisionType: CollisionType.passive,
+      ),
+    );
   }
 }

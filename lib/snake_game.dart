@@ -127,7 +127,7 @@ class SnakeGame extends FlameGame
     }
 
     if (gameManager.isPlaying) {
-      snakeDirectionBloc.add(TapArrowKeyEvent(direction: direction));
+      snakeDirectionBloc.add(TapArrowKeyEvent(directionRequested: direction));
     } else if (gameManager.isIntro) {
       startGame();
     }
