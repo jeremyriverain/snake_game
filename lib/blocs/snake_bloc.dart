@@ -1,6 +1,7 @@
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:snake_game/game_config.dart';
 import 'package:snake_game/utils/direction_util.dart';
 
 abstract class SnakeEvent {}
@@ -59,7 +60,7 @@ class SnakeState {
 final initialState = SnakeState(
   direction: Direction.right,
   bodyPartsEffects: [],
-  lengthSnake: 1,
+  lengthSnake: GameConfig.lengthSnake,
 );
 
 class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {

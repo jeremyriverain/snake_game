@@ -22,17 +22,21 @@ class Snake extends PositionComponent
   @override
   onLoad() async {
     super.onLoad();
-    bodyParts.addAll([
-      SnakeBodyPart()
-        ..position = -Vector2(
-          GameConfig.sizeCell,
-          0,
-        ),
-      SnakeHead(
-        whenEatFood: whenEatFood,
-        whenDead: whenDead,
-      ),
-    ]);
+    bodyParts
+      ..clear()
+      ..addAll(
+        List.generate(bloc.state.lengthSnake, (index) {
+          if (index == 0) {
+            return SnakeHead(
+              whenEatFood: whenEatFood,
+              whenDead: whenDead,
+            );
+          }
+
+          return SnakeBodyPart()
+            ..position = -Vector2(GameConfig.sizeCell * index, 0);
+        }),
+      );
 
     addAll(bodyParts);
 
@@ -65,11 +69,11 @@ class Snake extends PositionComponent
       final effect = SnakeEffect.createEffect(
         snakeBloc: gameRef.snakeBloc,
         gameFlowBloc: gameFlowBloc,
-        component: bodyParts.last,
+        component: bodyParts.first,
         direction: gameRef.snakeBloc.state.direction,
         previousDirection: Direction.right,
       );
-      bodyParts.last.addAll(effect);
+      bodyParts.first.addAll(effect);
       gameRef.snakeBloc.add(MoveEvent(effect: effect));
     }
   }
