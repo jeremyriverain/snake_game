@@ -1,3 +1,4 @@
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:snake_game/utils/direction_util.dart';
@@ -24,23 +25,41 @@ class CollideCellEvent extends SnakeEvent {}
 
 class ResetSnakeEvent extends SnakeEvent {}
 
+class MoveEvent extends SnakeEvent {
+  final List<Effect> effect;
+
+  MoveEvent({
+    required this.effect,
+  });
+}
+
 class SnakeState {
   final Direction direction;
+  final List<List<Effect>> bodyPartsEffects;
+  final int lengthSnake;
   SnakeState({
     required this.direction,
+    required this.bodyPartsEffects,
+    required this.lengthSnake,
   });
 
   SnakeState copyWith({
     Direction? direction,
+    List<List<Effect>>? bodyPartsEffects,
+    int? lengthSnake,
   }) {
     return SnakeState(
       direction: direction ?? this.direction,
+      bodyPartsEffects: bodyPartsEffects ?? this.bodyPartsEffects,
+      lengthSnake: lengthSnake ?? this.lengthSnake,
     );
   }
 }
 
 final initialState = SnakeState(
   direction: Direction.right,
+  bodyPartsEffects: [],
+  lengthSnake: 1,
 );
 
 class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
@@ -66,5 +85,15 @@ class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
     });
 
     on<ResetSnakeEvent>((event, emit) => emit(initialState));
+
+    on<MoveEvent>((event, emit) {
+      emit(
+        state.copyWith(
+          bodyPartsEffects: [
+            event.effect,
+          ],
+        ),
+      );
+    });
   }
 }

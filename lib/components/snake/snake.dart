@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:snake_game/blocs/game_flow_bloc.dart';
 import 'package:snake_game/blocs/snake_bloc.dart';
@@ -34,6 +35,19 @@ class Snake extends PositionComponent
     ]);
 
     addAll(bodyParts);
+
+    await add(
+      FlameBlocListener<GameFlowBloc, GameFlowState>(
+        listenWhen: (previousState, newState) {
+          return newState.gameState == GameState.gameOver;
+        },
+        onNewState: (state) {
+          for (final bodyPart in bodyParts) {
+            bodyPart.removeWhere((component) => component is Effect);
+          }
+        },
+      ),
+    );
   }
 
   void whenDead() {
@@ -48,13 +62,15 @@ class Snake extends PositionComponent
   void update(double dt) {
     if (!hasStarted && gameFlowBloc.state.gameState == GameState.playing) {
       hasStarted = true;
-      bodyParts.last.addAll(SnakeEffect.createEffect(
+      final effect = SnakeEffect.createEffect(
         snakeBloc: gameRef.snakeBloc,
         gameFlowBloc: gameFlowBloc,
         component: bodyParts.last,
         direction: gameRef.snakeBloc.state.direction,
         previousDirection: Direction.right,
-      ));
+      );
+      bodyParts.last.addAll(effect);
+      gameRef.snakeBloc.add(MoveEvent(effect: effect));
     }
   }
 }
