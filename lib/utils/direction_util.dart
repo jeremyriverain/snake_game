@@ -44,6 +44,15 @@ class DirectionUtil {
 
     return null;
   }
+
+  static Direction getForbiddenDirectionOf(Direction direction) {
+    return switch (direction) {
+      Direction.down => Direction.up,
+      Direction.up => Direction.down,
+      Direction.right => Direction.left,
+      Direction.left => Direction.right,
+    };
+  }
 }
 
 enum Direction { up, down, left, right }

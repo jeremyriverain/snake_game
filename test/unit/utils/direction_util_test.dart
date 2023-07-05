@@ -81,5 +81,24 @@ void main() {
         Direction.down,
       );
     });
+
+    test('getForbiddenDirectionOf', () {
+      expect(
+        DirectionUtil.getForbiddenDirectionOf(Direction.down),
+        Direction.up,
+      );
+      expect(
+        DirectionUtil.getForbiddenDirectionOf(Direction.up),
+        Direction.down,
+      );
+      expect(
+        DirectionUtil.getForbiddenDirectionOf(Direction.left),
+        Direction.right,
+      );
+      expect(
+        DirectionUtil.getForbiddenDirectionOf(Direction.right),
+        Direction.left,
+      );
+    });
   });
 }

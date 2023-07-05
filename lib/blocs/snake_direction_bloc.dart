@@ -36,16 +36,24 @@ class SnakeDirectionBloc
           ),
         ) {
     on<DragScreenEvent>((event, emit) {
+      final directionRequested = DirectionUtil.vectorsToDirection(
+        event.dragStartPosition,
+        event.dragLastPosition,
+      );
+
+      if (directionRequested ==
+          DirectionUtil.getForbiddenDirectionOf(state.direction)) {
+        return;
+      }
       emit(
-        SnakeDirectionState(
-          direction: DirectionUtil.vectorsToDirection(
-            event.dragStartPosition,
-            event.dragLastPosition,
-          ),
-        ),
+        SnakeDirectionState(direction: directionRequested),
       );
     });
     on<MoveEvent>((event, emit) {
+      if (event.direction ==
+          DirectionUtil.getForbiddenDirectionOf(state.direction)) {
+        return;
+      }
       emit(
         SnakeDirectionState(
           direction: event.direction,
