@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class ScoreEvent {}
 
-class IncrementSore extends ScoreEvent {}
+class IncrementStore extends ScoreEvent {}
 
 class ResetScore extends ScoreEvent {}
 
@@ -11,6 +11,12 @@ class ScoreState {
   ScoreState({
     required this.score,
   });
+
+  @override
+  bool operator ==(Object other) => other is ScoreState && score == other.score;
+
+  @override
+  int get hashCode => Object.hash(score, 0);
 }
 
 class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
@@ -18,7 +24,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       : super(
           ScoreState(score: 0),
         ) {
-    on<IncrementSore>(
+    on<IncrementStore>(
       (event, emit) => emit(
         ScoreState(score: state.score + 1),
       ),

@@ -1,4 +1,5 @@
 import 'package:flame/game.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/utils/direction_util.dart';
@@ -46,6 +47,38 @@ void main() {
       expect(
         DirectionUtil.directionToVector(Direction.down),
         Vector2(0, GameConfig.speed),
+      );
+    });
+
+    test('keyboardToDirection', () {
+      expect(DirectionUtil.keyboardToDirection({}), null);
+      expect(
+        DirectionUtil.keyboardToDirection({LogicalKeyboardKey.space}),
+        null,
+      );
+      expect(
+        DirectionUtil.keyboardToDirection(
+          {LogicalKeyboardKey.space, LogicalKeyboardKey.arrowRight},
+        ),
+        Direction.right,
+      );
+      expect(
+        DirectionUtil.keyboardToDirection(
+          {LogicalKeyboardKey.space, LogicalKeyboardKey.arrowLeft},
+        ),
+        Direction.left,
+      );
+      expect(
+        DirectionUtil.keyboardToDirection(
+          {LogicalKeyboardKey.space, LogicalKeyboardKey.arrowUp},
+        ),
+        Direction.up,
+      );
+      expect(
+        DirectionUtil.keyboardToDirection(
+          {LogicalKeyboardKey.space, LogicalKeyboardKey.arrowDown},
+        ),
+        Direction.down,
       );
     });
   });

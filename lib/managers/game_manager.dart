@@ -19,7 +19,7 @@ class GameManager extends Component
   }
 
   void increaseScore() {
-    bloc.add(IncrementSore());
+    bloc.add(IncrementStore());
   }
 }
 
