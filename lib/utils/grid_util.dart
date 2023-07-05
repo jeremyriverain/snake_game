@@ -1,12 +1,13 @@
 import 'package:flame/components.dart';
+import 'package:snake_game/game_config.dart';
 
-class VirtualGrid {
+class GridUtil {
   final double sizeCell;
   final int columns;
   final int rows;
   final Vector2 gridPosition;
 
-  VirtualGrid({
+  GridUtil({
     required this.sizeCell,
     required this.columns,
     required this.rows,
@@ -38,4 +39,17 @@ class VirtualGrid {
   }) {
     return ((virtualGridVector + Vector2.all(.5)) * sizeCell);
   }
+
+  static bool hasMovedToNextCell({
+    required Vector2 previousCell,
+    required Vector2 nextCell,
+  }) {
+    final isXAxisOverflowed = nextCell.x - previousCell.x > GameConfig.sizeCell;
+    final isYAxisOverflowed = nextCell.y - previousCell.y > GameConfig.sizeCell;
+    return isXAxisOverflowed || isYAxisOverflowed;
+  }
+
+  // static Vector2 normalizeVector(Vector2 vector) {
+  //   return Vector2(vector.x.floorToDouble(), vector.y.floorToDouble());
+  // }
 }

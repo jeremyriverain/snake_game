@@ -21,6 +21,7 @@ class Snake extends PositionComponent
   @override
   onLoad() async {
     super.onLoad();
+
     bodyParts.addAll([
       // SnakeBodyPart()
       //   ..position = -Vector2(
@@ -67,9 +68,10 @@ class Snake extends PositionComponent
   @override
   void update(double dt) {
     if (gameRef.gameManager.isPlaying) {
-      bodyParts.last.position +=
+      final head = bodyParts.last;
+      head.position +=
           DirectionUtil.directionToVector(bloc.state.direction) * dt;
-      bodyParts.last.angle = getHeadAngle(bloc.state.direction);
+      head.angle = getHeadAngle(bloc.state.direction);
     }
   }
 

@@ -1,12 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:snake_game/virtual_grid.dart';
+import 'package:snake_game/utils/grid_util.dart';
 
 void main() {
-  group('VirtualGrid', () {
+  group('GridUtil', () {
     const double sizeCell = 10;
 
-    final grid = VirtualGrid(
+    final grid = GridUtil(
       sizeCell: sizeCell,
       columns: 2,
       rows: 3,

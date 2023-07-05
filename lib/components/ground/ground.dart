@@ -11,11 +11,11 @@ import 'package:snake_game/components/snake/snake.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/game_manager.dart';
 import 'package:snake_game/snake_game.dart';
-import 'package:snake_game/virtual_grid.dart';
+import 'package:snake_game/utils/grid_util.dart';
 
 class Ground extends PositionComponent
     with HasGameRef<SnakeGame>, FlameBlocReader<ScoreBloc, ScoreState> {
-  late final VirtualGrid virtualGrid;
+  late final GridUtil virtualGrid;
 
   Snake snake = Snake();
   Food food = Food();
@@ -40,7 +40,7 @@ class Ground extends PositionComponent
       GameConfig.sizeCell * GameConfig.rows,
     );
 
-    virtualGrid = VirtualGrid(
+    virtualGrid = GridUtil(
       sizeCell: GameConfig.sizeCell,
       columns: GameConfig.columns,
       rows: GameConfig.rows,
