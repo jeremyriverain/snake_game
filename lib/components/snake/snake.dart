@@ -1,11 +1,15 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame_bloc/flame_bloc.dart';
+import 'package:flutter/widgets.dart';
 import 'package:snake_game/blocs/game_flow_bloc.dart';
 import 'package:snake_game/blocs/snake_bloc.dart';
+import 'package:snake_game/components/snake/snake_body_part.dart';
 import 'package:snake_game/components/snake/snake_head.dart';
 import 'package:snake_game/game_config.dart';
+import 'package:snake_game/main.dart';
 import 'package:snake_game/snake_game.dart';
 import 'package:snake_game/utils/direction_util.dart';
 
@@ -16,6 +20,8 @@ class Snake extends PositionComponent
   Snake() : super(priority: 1);
 
   Vector2 defaultDirection = Vector2(GameConfig.speed, 0);
+
+  bool hasStarted = false;
 
   @override
   onLoad() async {
@@ -31,11 +37,11 @@ class Snake extends PositionComponent
       //     GameConfig.sizeCell * 2,
       //     0,
       //   ),
-      // SnakeBodyPart()
-      //   ..position = -Vector2(
-      //     GameConfig.sizeCell,
-      //     0,
-      //   ),
+      SnakeBodyPart()
+        ..position = -Vector2(
+          GameConfig.sizeCell,
+          0,
+        ),
       head,
     ]);
 
@@ -46,36 +52,40 @@ class Snake extends PositionComponent
     gameRef.gameOver();
   }
 
+  late Effect effect;
+
   void whenCollideCell() {
     bloc.add(CollideCellEvent());
   }
 
   void whenEatFood() {
-    // final bodyPart = SnakeBodyPart()
-    //   ..position = -Vector2(
-    //     GameConfig.sizeCell * bodyParts.length - 1,
-    //     0,
-    //   )
-    //   ..anchor = Anchor.topRight
-    //   ..size = Vector2(0, GameConfig.sizeCell)
-    //   ..add(SizeEffect.to(
-    //     Vector2.all(GameConfig.sizeCell),
-    //     EffectController(
-    //       duration: .1,
-    //     ),
-    //   ));
-    // bodyParts.add(bodyPart);
-    // add(bodyPart);
     gameRef.onEatFood();
+  }
+
+  Effect createEffect() {
+    final head = bodyParts.last;
+
+    return MoveByEffect(
+      DirectionUtil.directionToVector(bloc.state.direction),
+      EffectController(
+        duration: .2,
+        curve: Curves.linear,
+      ),
+      onComplete: () {
+        if (gameFlowBloc.state.gameState == GameState.playing) {
+          head.add(createEffect());
+        }
+      },
+    )..removeOnFinish = true;
   }
 
   @override
   void update(double dt) {
-    if (gameRef.gameFlowBloc.state.gameState == GameState.playing) {
+    if (!hasStarted && gameFlowBloc.state.gameState == GameState.playing) {
+      hasStarted = true;
       final head = bodyParts.last;
-      head.position +=
-          DirectionUtil.directionToVector(bloc.state.direction) * dt;
-      head.angle = getHeadAngle(bloc.state.direction);
+
+      head.add(createEffect());
     }
   }
 

@@ -5,19 +5,22 @@ import 'package:snake_game/game_config.dart';
 
 class Cell extends RectangleComponent {
   final Color color;
-
+  final bool hasHitbox;
   Cell({
     required this.color,
     required Vector2 position,
+    required this.hasHitbox,
   }) : super(
           size: Vector2.all(GameConfig.sizeCell),
           position: position,
         ) {
     setColor(color);
-    add(
-      RectangleHitbox(
-        collisionType: CollisionType.passive,
-      ),
-    );
+    if (hasHitbox) {
+      add(
+        RectangleHitbox(
+          collisionType: CollisionType.passive,
+        ),
+      );
+    }
   }
 }

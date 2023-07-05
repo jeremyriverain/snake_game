@@ -88,11 +88,13 @@ class Ground extends PositionComponent {
 
     for (var row = 0; row < GameConfig.rows; row++) {
       for (var column = 0; column < GameConfig.columns; column++) {
+        final hasHitbox =
+            (row.isEven && column.isEven) || (row.isOdd && column.isOdd);
         tiles.add(
           Cell(
-            color: (row.isEven && column.isEven) || (row.isOdd && column.isOdd)
-                ? const Color(0xFFAAD750)
-                : const Color(0xFFA3D148),
+            hasHitbox: hasHitbox,
+            color:
+                hasHitbox ? const Color(0xFFAAD750) : const Color(0xFFA3D148),
             position: Vector2(
                 column * GameConfig.sizeCell, row * GameConfig.sizeCell),
           ),

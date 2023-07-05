@@ -31,22 +31,22 @@ void main() {
     test('directionToVector', () {
       expect(
         DirectionUtil.directionToVector(Direction.left),
-        Vector2(-GameConfig.speed, 0),
+        Vector2(-GameConfig.sizeCell, 0),
       );
 
       expect(
         DirectionUtil.directionToVector(Direction.right),
-        Vector2(GameConfig.speed, 0),
+        Vector2(GameConfig.sizeCell, 0),
       );
 
       expect(
         DirectionUtil.directionToVector(Direction.up),
-        Vector2(0, -GameConfig.speed),
+        Vector2(0, -GameConfig.sizeCell),
       );
 
       expect(
         DirectionUtil.directionToVector(Direction.down),
-        Vector2(0, GameConfig.speed),
+        Vector2(0, GameConfig.sizeCell),
       );
     });
 

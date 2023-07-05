@@ -14,10 +14,10 @@ class DirectionUtil {
 
   static Vector2 directionToVector(Direction direction) {
     return switch (direction) {
-      Direction.down => Vector2(0, GameConfig.speed),
-      Direction.up => Vector2(0, -GameConfig.speed),
-      Direction.left => Vector2(-GameConfig.speed, 0),
-      Direction.right => Vector2(GameConfig.speed, 0),
+      Direction.down => Vector2(0, GameConfig.sizeCell),
+      Direction.up => Vector2(0, -GameConfig.sizeCell),
+      Direction.left => Vector2(-GameConfig.sizeCell, 0),
+      Direction.right => Vector2(GameConfig.sizeCell, 0),
     };
   }
 
