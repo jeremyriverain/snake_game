@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:snake_game/blocs/score_bloc.dart';
 import 'package:snake_game/blocs/snake_direction_bloc.dart';
 import 'package:snake_game/main.dart';
-import 'package:snake_game/managers/game_manager.dart';
+import 'package:snake_game/game_manager.dart';
 import 'package:snake_game/components/ground/ground.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/utils/direction_util.dart';

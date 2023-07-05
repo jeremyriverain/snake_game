@@ -9,7 +9,7 @@ import 'package:snake_game/components/food.dart';
 import 'package:snake_game/components/ground/cell.dart';
 import 'package:snake_game/components/snake/snake.dart';
 import 'package:snake_game/game_config.dart';
-import 'package:snake_game/managers/game_manager.dart';
+import 'package:snake_game/game_manager.dart';
 import 'package:snake_game/snake_game.dart';
 import 'package:snake_game/virtual_grid.dart';
 
