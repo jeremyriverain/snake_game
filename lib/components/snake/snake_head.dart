@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/particles.dart';
 import 'package:flutter/material.dart';
 import 'package:snake_game/components/food.dart';
+import 'package:snake_game/components/ground/cell.dart';
 import 'package:snake_game/components/ground/ground.dart';
 import 'package:snake_game/game_config.dart';
 
@@ -27,7 +28,15 @@ class SnakeHead extends SpriteComponent with CollisionCallbacks {
       srcPosition: Vector2(GameConfig.sizeCellAsset * 2, 0),
     );
 
-    add(RectangleHitbox());
+    final Vector2 sizeHitbox =
+        Vector2(GameConfig.sizeCell - 5, GameConfig.sizeCell - 14);
+    add(RectangleHitbox(
+      size: sizeHitbox,
+      position: Vector2(
+        GameConfig.sizeCell - sizeHitbox.x,
+        (GameConfig.sizeCell - sizeHitbox.y) / 2,
+      ),
+    ));
   }
 
   @override
@@ -42,6 +51,9 @@ class SnakeHead extends SpriteComponent with CollisionCallbacks {
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
+    if (other is Cell) {
+      // print('cell');
+    }
     if (other is Ground) {
       add(
         ParticleSystemComponent(

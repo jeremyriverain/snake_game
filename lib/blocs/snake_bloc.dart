@@ -2,9 +2,9 @@ import 'package:flame/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:snake_game/utils/direction_util.dart';
 
-abstract class SnakeDirectionEvent {}
+abstract class SnakeEvent {}
 
-class DragScreenEvent extends SnakeDirectionEvent {
+class DragScreenEvent extends SnakeEvent {
   final Vector2 dragStartPosition;
   final Vector2 dragLastPosition;
   DragScreenEvent({
@@ -13,26 +13,44 @@ class DragScreenEvent extends SnakeDirectionEvent {
   });
 }
 
-class MoveEvent extends SnakeDirectionEvent {
+class TapArrowKeyEvent extends SnakeEvent {
   final Direction direction;
-  MoveEvent({
+  TapArrowKeyEvent({
     required this.direction,
   });
 }
 
-class SnakeDirectionState {
-  final Direction direction;
-  SnakeDirectionState({
-    required this.direction,
-  });
+class MoveHeadEvent extends SnakeEvent {
+  final Vector2 position;
+
+  MoveHeadEvent({required this.position});
 }
 
-class SnakeDirectionBloc
-    extends Bloc<SnakeDirectionEvent, SnakeDirectionState> {
-  SnakeDirectionBloc()
+class SnakeState {
+  final Direction direction;
+  final Vector2 headPosition;
+  SnakeState({
+    required this.direction,
+    required this.headPosition,
+  });
+
+  SnakeState copyWith({
+    Direction? direction,
+    Vector2? headPosition,
+  }) {
+    return SnakeState(
+      direction: direction ?? this.direction,
+      headPosition: headPosition ?? this.headPosition,
+    );
+  }
+}
+
+class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
+  SnakeBloc()
       : super(
-          SnakeDirectionState(
+          SnakeState(
             direction: Direction.right,
+            headPosition: Vector2.zero(),
           ),
         ) {
     on<DragScreenEvent>((event, emit) {
@@ -45,20 +63,18 @@ class SnakeDirectionBloc
           DirectionUtil.getForbiddenDirectionOf(state.direction)) {
         return;
       }
-      emit(
-        SnakeDirectionState(direction: directionRequested),
-      );
+      emit(state.copyWith(direction: directionRequested));
     });
-    on<MoveEvent>((event, emit) {
+    on<TapArrowKeyEvent>((event, emit) {
       if (event.direction ==
           DirectionUtil.getForbiddenDirectionOf(state.direction)) {
         return;
       }
-      emit(
-        SnakeDirectionState(
-          direction: event.direction,
-        ),
-      );
+      emit(state.copyWith(direction: event.direction));
+    });
+
+    on<MoveHeadEvent>((event, emit) {
+      emit(state.copyWith(headPosition: event.position));
     });
   }
 }

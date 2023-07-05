@@ -5,7 +5,7 @@ import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:snake_game/blocs/score_bloc.dart';
-import 'package:snake_game/blocs/snake_direction_bloc.dart';
+import 'package:snake_game/blocs/snake_bloc.dart';
 import 'package:snake_game/main.dart';
 import 'package:snake_game/game_manager.dart';
 import 'package:snake_game/components/ground/ground.dart';
@@ -21,7 +21,7 @@ class SnakeGame extends FlameGame
     required this.scoreBloc,
   });
 
-  final SnakeDirectionBloc snakeDirectionBloc = SnakeDirectionBloc();
+  final SnakeBloc snakeDirectionBloc = SnakeBloc();
 
   @override
   Color backgroundColor() => const Color(0xFF578B33);
@@ -44,7 +44,7 @@ class SnakeGame extends FlameGame
           FlameBlocProvider<ScoreBloc, ScoreState>(
             create: () => scoreBloc,
           ),
-          FlameBlocProvider<SnakeDirectionBloc, SnakeDirectionState>(
+          FlameBlocProvider<SnakeBloc, SnakeState>(
             create: () => snakeDirectionBloc,
           ),
         ],
@@ -127,7 +127,7 @@ class SnakeGame extends FlameGame
     }
 
     if (gameManager.isPlaying) {
-      snakeDirectionBloc.add(MoveEvent(direction: direction));
+      snakeDirectionBloc.add(TapArrowKeyEvent(direction: direction));
     } else if (gameManager.isIntro) {
       startGame();
     }

@@ -1,3 +1,4 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:snake_game/game_config.dart';
@@ -13,5 +14,6 @@ class Cell extends RectangleComponent {
           position: position,
         ) {
     setColor(color);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 }

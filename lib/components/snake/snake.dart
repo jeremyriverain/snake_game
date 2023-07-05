@@ -2,16 +2,14 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
-import 'package:snake_game/blocs/snake_direction_bloc.dart';
+import 'package:snake_game/blocs/snake_bloc.dart';
 import 'package:snake_game/components/snake/snake_head.dart';
 import 'package:snake_game/game_config.dart';
 import 'package:snake_game/snake_game.dart';
 import 'package:snake_game/utils/direction_util.dart';
 
 class Snake extends PositionComponent
-    with
-        HasGameRef<SnakeGame>,
-        FlameBlocReader<SnakeDirectionBloc, SnakeDirectionState> {
+    with HasGameRef<SnakeGame>, FlameBlocReader<SnakeBloc, SnakeState> {
   final List<PositionComponent> bodyParts = [];
 
   Snake() : super(priority: 1);
@@ -21,7 +19,10 @@ class Snake extends PositionComponent
   @override
   onLoad() async {
     super.onLoad();
-
+    final snake = SnakeHead(
+      whenEatFood: whenEatFood,
+      whenDead: whenDead,
+    );
     bodyParts.addAll([
       // SnakeBodyPart()
       //   ..position = -Vector2(
@@ -33,13 +34,11 @@ class Snake extends PositionComponent
       //     GameConfig.sizeCell,
       //     0,
       //   ),
-      SnakeHead(
-        whenEatFood: whenEatFood,
-        whenDead: whenDead,
-      ),
+      snake,
     ]);
 
     addAll(bodyParts);
+    bloc.add(MoveHeadEvent(position: snake.position));
   }
 
   void whenDead() {
@@ -71,6 +70,7 @@ class Snake extends PositionComponent
       final head = bodyParts.last;
       head.position +=
           DirectionUtil.directionToVector(bloc.state.direction) * dt;
+      bloc.add(MoveHeadEvent(position: head.position));
       head.angle = getHeadAngle(bloc.state.direction);
     }
   }
