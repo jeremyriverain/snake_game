@@ -1,4 +1,3 @@
-import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:snake_game/game_config.dart';
@@ -27,31 +26,31 @@ class CollideCellEvent extends SnakeEvent {}
 class ResetSnakeEvent extends SnakeEvent {}
 
 class MoveEvent extends SnakeEvent {
-  final List<Effect> effect;
+  final Vector2 direction;
 
   MoveEvent({
-    required this.effect,
+    required this.direction,
   });
 }
 
 class SnakeState {
   final Direction direction;
-  final List<List<Effect>> headMovements;
+  final List<Vector2> headDirectionHistory;
   final int lengthSnake;
   SnakeState({
     required this.direction,
-    required this.headMovements,
+    required this.headDirectionHistory,
     required this.lengthSnake,
   });
 
   SnakeState copyWith({
     Direction? direction,
-    List<List<Effect>>? headMovements,
+    List<Vector2>? headDirectionHistory,
     int? lengthSnake,
   }) {
     return SnakeState(
       direction: direction ?? this.direction,
-      headMovements: headMovements ?? this.headMovements,
+      headDirectionHistory: headDirectionHistory ?? this.headDirectionHistory,
       lengthSnake: lengthSnake ?? this.lengthSnake,
     );
   }
@@ -59,7 +58,9 @@ class SnakeState {
 
 final initialState = SnakeState(
   direction: Direction.right,
-  headMovements: [],
+  headDirectionHistory: List.unmodifiable([
+    DirectionUtil.directionToVector(Direction.right),
+  ]),
   lengthSnake: GameConfig.lengthSnake,
 );
 
@@ -88,9 +89,11 @@ class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
     on<ResetSnakeEvent>((event, emit) => emit(initialState));
 
     on<MoveEvent>((event, emit) {
+      final List<Vector2> history =
+          List.unmodifiable([...state.headDirectionHistory, event.direction]);
       emit(
         state.copyWith(
-          headMovements: state.headMovements..add(event.effect),
+          headDirectionHistory: history,
         ),
       );
     });

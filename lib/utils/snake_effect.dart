@@ -10,9 +10,9 @@ class SnakeEffect {
   static List<Effect> createHeadEffect({
     required SnakeBloc snakeBloc,
     required PositionComponent component,
-    required Direction direction,
     required Direction previousDirection,
   }) {
+    final direction = snakeBloc.state.direction;
     return [
       MoveByEffect(
         DirectionUtil.directionToVector(direction),
@@ -21,10 +21,11 @@ class SnakeEffect {
           curve: Curves.linear,
         ),
         onComplete: () {
+          snakeBloc.add(
+              MoveEvent(direction: DirectionUtil.directionToVector(direction)));
           component.addAll(createHeadEffect(
             snakeBloc: snakeBloc,
             component: component,
-            direction: snakeBloc.state.direction,
             previousDirection: direction,
           ));
         },
@@ -44,10 +45,17 @@ class SnakeEffect {
 
   static List<Effect> createBodyEffect({
     required PositionComponent component,
+    required SnakeBloc snakeBloc,
+    required int indexHistory,
+    required List<Vector2> offset,
   }) {
+    final List<Vector2> completeHistory = [
+      ...offset,
+      ...snakeBloc.state.headDirectionHistory,
+    ];
     return [
       MoveByEffect(
-        DirectionUtil.directionToVector(Direction.right),
+        completeHistory[indexHistory],
         EffectController(
           duration: .4,
           curve: Curves.linear,
@@ -55,6 +63,9 @@ class SnakeEffect {
         onComplete: () {
           component.addAll(createBodyEffect(
             component: component,
+            indexHistory: indexHistory + 1,
+            offset: offset,
+            snakeBloc: snakeBloc,
           ));
         },
       )..removeOnFinish = true,

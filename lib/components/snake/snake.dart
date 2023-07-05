@@ -66,19 +66,23 @@ class Snake extends PositionComponent
   void update(double dt) {
     if (!hasStarted && gameFlowBloc.state.gameState == GameState.playing) {
       hasStarted = true;
+      final direction = gameRef.snakeBloc.state.direction;
       final effect = SnakeEffect.createHeadEffect(
         snakeBloc: gameRef.snakeBloc,
         component: bodyParts.first,
-        direction: gameRef.snakeBloc.state.direction,
         previousDirection: Direction.right,
       );
       bodyParts.first.addAll(effect);
-      gameRef.snakeBloc.add(MoveEvent(effect: effect));
-
       for (var i = 1; i < bodyParts.length; i++) {
         bodyParts[i].addAll(
           SnakeEffect.createBodyEffect(
             component: bodyParts[i],
+            indexHistory: 0,
+            offset: List.generate(
+              i,
+              (index) => DirectionUtil.directionToVector(direction),
+            ),
+            snakeBloc: bloc,
           ),
         );
       }
