@@ -92,7 +92,6 @@ class Ground extends PositionComponent {
             (row.isEven && column.isEven) || (row.isOdd && column.isOdd);
         tiles.add(
           Cell(
-            hasHitbox: hasHitbox,
             color:
                 hasHitbox ? const Color(0xFFAAD750) : const Color(0xFFA3D148),
             position: Vector2(

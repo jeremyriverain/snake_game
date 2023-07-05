@@ -3,19 +3,16 @@ import 'package:flame/components.dart';
 import 'package:flame/particles.dart';
 import 'package:flutter/material.dart';
 import 'package:snake_game/components/food.dart';
-import 'package:snake_game/components/ground/cell.dart';
 import 'package:snake_game/components/ground/ground.dart';
 import 'package:snake_game/game_config.dart';
 
 class SnakeHead extends SpriteComponent with CollisionCallbacks {
   final void Function() whenEatFood;
   final void Function() whenDead;
-  final void Function() whenCollideCell;
 
   SnakeHead({
     required this.whenEatFood,
     required this.whenDead,
-    required this.whenCollideCell,
   }) : super(
           size: Vector2.all(
             GameConfig.sizeCell,
@@ -47,9 +44,6 @@ class SnakeHead extends SpriteComponent with CollisionCallbacks {
     super.onCollisionEnd(other);
     if (other is Food) {
       whenEatFood();
-    }
-    if (other is Cell) {
-      whenCollideCell();
     }
   }
 

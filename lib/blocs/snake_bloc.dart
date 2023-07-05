@@ -26,19 +26,15 @@ class ResetSnakeEvent extends SnakeEvent {}
 
 class SnakeState {
   final Direction direction;
-  final Direction? directionRequested;
   SnakeState({
     required this.direction,
-    this.directionRequested,
   });
 
   SnakeState copyWith({
     Direction? direction,
-    Direction? directionRequested,
   }) {
     return SnakeState(
       direction: direction ?? this.direction,
-      directionRequested: directionRequested ?? this.directionRequested,
     );
   }
 }
@@ -59,18 +55,14 @@ class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
           DirectionUtil.getForbiddenDirectionOf(state.direction)) {
         return;
       }
-      emit(state.copyWith(directionRequested: directionRequested));
+      emit(state.copyWith(direction: directionRequested));
     });
     on<TapArrowKeyEvent>((event, emit) {
       if (event.directionRequested ==
           DirectionUtil.getForbiddenDirectionOf(state.direction)) {
         return;
       }
-      emit(state.copyWith(directionRequested: event.directionRequested));
-    });
-
-    on<CollideCellEvent>((event, emit) {
-      emit(state.copyWith(direction: state.directionRequested));
+      emit(state.copyWith(direction: event.directionRequested));
     });
 
     on<ResetSnakeEvent>((event, emit) => emit(initialState));
