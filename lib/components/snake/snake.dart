@@ -33,7 +33,7 @@ class Snake extends PositionComponent
             );
           }
 
-          return SnakeBodyPart()
+          return SnakeBodyPart(hasHitbox: index != 1)
             ..position = -Vector2(GameConfig.sizeCell * index, 0);
         }),
       );

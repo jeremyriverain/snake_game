@@ -4,6 +4,7 @@ import 'package:flame/particles.dart';
 import 'package:flutter/material.dart';
 import 'package:snake_game/components/food.dart';
 import 'package:snake_game/components/ground/ground.dart';
+import 'package:snake_game/components/snake/snake_body_part.dart';
 import 'package:snake_game/game_config.dart';
 
 class SnakeHead extends SpriteComponent with CollisionCallbacks {
@@ -51,7 +52,7 @@ class SnakeHead extends SpriteComponent with CollisionCallbacks {
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is Ground) {
+    if (other is Ground || other is SnakeBodyPart) {
       add(
         ParticleSystemComponent(
           position: Vector2(GameConfig.sizeCell, GameConfig.sizeCell / 2),
