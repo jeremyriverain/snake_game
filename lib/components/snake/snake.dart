@@ -62,13 +62,27 @@ class Snake extends PositionComponent
     gameRef.onEatFood();
   }
 
+  final List<Vector2> moveHeadHistory = [];
+
+  Direction onCompleteHeadEffect() {
+    final direction = bloc.state.direction;
+    moveHeadHistory.add(DirectionUtil.directionToVector(direction));
+    return direction;
+  }
+
+  List<Vector2> onCompleteBodyEffect() {
+    return moveHeadHistory;
+  }
+
   @override
   void update(double dt) {
     if (!hasStarted && gameFlowBloc.state.gameState == GameState.playing) {
       hasStarted = true;
       final direction = gameRef.snakeBloc.state.direction;
+      moveHeadHistory.add(DirectionUtil.directionToVector(direction));
       final effect = SnakeEffect.createHeadEffect(
-        snakeBloc: gameRef.snakeBloc,
+        direction: direction,
+        onComplete: onCompleteHeadEffect,
         component: bodyParts.first,
         previousDirection: Direction.right,
       );
@@ -82,7 +96,8 @@ class Snake extends PositionComponent
               i,
               (index) => DirectionUtil.directionToVector(direction),
             ),
-            snakeBloc: bloc,
+            headHistory: moveHeadHistory,
+            onComplete: onCompleteBodyEffect,
           ),
         );
       }

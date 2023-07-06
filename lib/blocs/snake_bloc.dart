@@ -25,32 +25,20 @@ class CollideCellEvent extends SnakeEvent {}
 
 class ResetSnakeEvent extends SnakeEvent {}
 
-class MoveEvent extends SnakeEvent {
-  final Vector2 direction;
-
-  MoveEvent({
-    required this.direction,
-  });
-}
-
 class SnakeState {
   final Direction direction;
-  final List<Vector2> headDirectionHistory;
   final int lengthSnake;
   SnakeState({
     required this.direction,
-    required this.headDirectionHistory,
     required this.lengthSnake,
   });
 
   SnakeState copyWith({
     Direction? direction,
-    List<Vector2>? headDirectionHistory,
     int? lengthSnake,
   }) {
     return SnakeState(
       direction: direction ?? this.direction,
-      headDirectionHistory: headDirectionHistory ?? this.headDirectionHistory,
       lengthSnake: lengthSnake ?? this.lengthSnake,
     );
   }
@@ -58,9 +46,6 @@ class SnakeState {
 
 final initialState = SnakeState(
   direction: Direction.right,
-  headDirectionHistory: List.unmodifiable([
-    DirectionUtil.directionToVector(Direction.right),
-  ]),
   lengthSnake: GameConfig.lengthSnake,
 );
 
@@ -87,15 +72,5 @@ class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
     });
 
     on<ResetSnakeEvent>((event, emit) => emit(initialState));
-
-    on<MoveEvent>((event, emit) {
-      final List<Vector2> history =
-          List.unmodifiable([...state.headDirectionHistory, event.direction]);
-      emit(
-        state.copyWith(
-          headDirectionHistory: history,
-        ),
-      );
-    });
   }
 }

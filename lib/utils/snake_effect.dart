@@ -8,11 +8,11 @@ import 'package:snake_game/utils/direction_util.dart';
 
 class SnakeEffect {
   static List<Effect> createHeadEffect({
-    required SnakeBloc snakeBloc,
     required PositionComponent component,
     required Direction previousDirection,
+    required Direction direction,
+    required Direction Function() onComplete,
   }) {
-    final direction = snakeBloc.state.direction;
     return [
       MoveByEffect(
         DirectionUtil.directionToVector(direction),
@@ -21,12 +21,12 @@ class SnakeEffect {
           curve: Curves.linear,
         ),
         onComplete: () {
-          snakeBloc.add(
-              MoveEvent(direction: DirectionUtil.directionToVector(direction)));
+          final newDirection = onComplete();
           component.addAll(createHeadEffect(
-            snakeBloc: snakeBloc,
             component: component,
             previousDirection: direction,
+            onComplete: onComplete,
+            direction: newDirection,
           ));
         },
       )..removeOnFinish = true,
@@ -45,13 +45,14 @@ class SnakeEffect {
 
   static List<Effect> createBodyEffect({
     required PositionComponent component,
-    required SnakeBloc snakeBloc,
     required int indexHistory,
     required List<Vector2> offset,
+    required List<Vector2> headHistory,
+    required List<Vector2> Function() onComplete,
   }) {
     final List<Vector2> completeHistory = [
       ...offset,
-      ...snakeBloc.state.headDirectionHistory,
+      ...headHistory,
     ];
     return [
       MoveByEffect(
@@ -61,11 +62,13 @@ class SnakeEffect {
           curve: Curves.linear,
         ),
         onComplete: () {
+          final newHistory = onComplete();
           component.addAll(createBodyEffect(
             component: component,
             indexHistory: indexHistory + 1,
             offset: offset,
-            snakeBloc: snakeBloc,
+            headHistory: newHistory,
+            onComplete: onComplete,
           ));
         },
       )..removeOnFinish = true,
