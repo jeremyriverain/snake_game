@@ -21,12 +21,13 @@ class SnakeBodyPart extends SpriteComponent {
     );
 
     if (hasHitbox) {
-      add(RectangleHitbox(
-          collisionType: CollisionType.passive,
-          size: Vector2.all(GameConfig.sizeCell - 5),
-          position: size / 2,
-          anchor: Anchor.center)
-        ..renderShape = true);
+      add(
+        RectangleHitbox(
+            collisionType: CollisionType.passive,
+            size: Vector2.all(GameConfig.sizeCell - 5),
+            position: size / 2,
+            anchor: Anchor.center),
+      );
     }
   }
 }

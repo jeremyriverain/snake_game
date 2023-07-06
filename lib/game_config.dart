@@ -4,4 +4,5 @@ class GameConfig {
   static const double sizeCellAsset = 384;
   static const double sizeCell = 27;
   static const int lengthSnake = 3;
+  static const double snakeMovementDuration = 0.25;
 }

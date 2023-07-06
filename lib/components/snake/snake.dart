@@ -25,7 +25,7 @@ class Snake extends PositionComponent
     bodyParts
       ..clear()
       ..addAll(
-        List.generate(bloc.state.lengthSnake, (index) {
+        List.generate(GameConfig.lengthSnake, (index) {
           if (index == 0) {
             return SnakeHead(
               whenEatFood: whenEatFood,

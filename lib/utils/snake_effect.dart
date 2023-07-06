@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/widgets.dart';
-import 'package:snake_game/blocs/snake_bloc.dart';
+import 'package:snake_game/game_config.dart';
 import 'package:snake_game/utils/direction_util.dart';
 
 class SnakeEffect {
@@ -17,7 +17,7 @@ class SnakeEffect {
       MoveByEffect(
         DirectionUtil.directionToVector(direction),
         EffectController(
-          duration: .4,
+          duration: GameConfig.snakeMovementDuration,
           curve: Curves.linear,
         ),
         onComplete: () {
@@ -36,7 +36,7 @@ class SnakeEffect {
           direction: direction,
         ),
         EffectController(
-          duration: .25,
+          duration: GameConfig.snakeMovementDuration * 2 / 3,
           curve: Curves.linear,
         ),
       )
@@ -58,7 +58,7 @@ class SnakeEffect {
       MoveByEffect(
         completeHistory[indexHistory],
         EffectController(
-          duration: .4,
+          duration: GameConfig.snakeMovementDuration,
           curve: Curves.linear,
         ),
         onComplete: () {

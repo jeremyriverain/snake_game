@@ -1,6 +1,5 @@
 import 'package:flame/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:snake_game/game_config.dart';
 import 'package:snake_game/utils/direction_util.dart';
 
 abstract class SnakeEvent {}
@@ -27,10 +26,8 @@ class ResetSnakeEvent extends SnakeEvent {}
 
 class SnakeState {
   final Direction direction;
-  final int lengthSnake;
   SnakeState({
     required this.direction,
-    required this.lengthSnake,
   });
 
   SnakeState copyWith({
@@ -39,14 +36,12 @@ class SnakeState {
   }) {
     return SnakeState(
       direction: direction ?? this.direction,
-      lengthSnake: lengthSnake ?? this.lengthSnake,
     );
   }
 }
 
 final initialState = SnakeState(
   direction: Direction.right,
-  lengthSnake: GameConfig.lengthSnake,
 );
 
 class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
