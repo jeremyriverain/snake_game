@@ -11,6 +11,11 @@ class GameFlowState {
   GameFlowState({
     required this.gameState,
   });
+
+  static bool isRestartingGame(
+          GameFlowState previousState, GameFlowState newState) =>
+      previousState.gameState == GameState.gameOver &&
+      newState.gameState == GameState.playing;
 }
 
 final initialState = GameFlowState(gameState: GameState.intro);

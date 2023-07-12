@@ -1,12 +1,12 @@
 import 'package:flame/components.dart';
 
-class GridUtil {
+class VirtualGrid {
   final double sizeCell;
   final int columns;
   final int rows;
   final Vector2 gridPosition;
 
-  GridUtil({
+  VirtualGrid({
     required this.sizeCell,
     required this.columns,
     required this.rows,
@@ -37,5 +37,15 @@ class GridUtil {
     required Vector2 virtualGridVector,
   }) {
     return ((virtualGridVector + Vector2.all(.5)) * sizeCell);
+  }
+
+  List<Vector2> getEmptyCells(List<PositionComponent> components) {
+    final filledCells = components
+        .map((component) => toVirtualVector(component: component))
+        .toList();
+
+    return getAllVectors()
+        .where((cell) => !filledCells.contains(cell))
+        .toList();
   }
 }
