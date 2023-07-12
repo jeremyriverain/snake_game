@@ -32,7 +32,7 @@ class ScoreOverlay extends StatelessWidget {
             ),
           ),
           Text(
-            'x ${context.watch<ScoreBloc>().state.score}',
+            'x ${context.watch<ScoreBloc>().state}',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.white,
                   fontSize: 20,

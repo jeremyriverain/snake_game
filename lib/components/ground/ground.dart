@@ -33,9 +33,10 @@ class Ground extends PositionComponent {
     _initializeFood();
 
     await add(
-      FlameBlocListener<GameFlowBloc, GameFlowState>(
+      FlameBlocListener<GameFlowBloc, GameState>(
         listenWhen: (previousState, newState) =>
-            GameFlowState.isRestartingGame(previousState, newState),
+            previousState == GameState.gameOver &&
+            newState == GameState.playing,
         onNewState: (state) {
           _initializeSnake();
           _initializeFood();
@@ -44,9 +45,9 @@ class Ground extends PositionComponent {
     );
 
     await add(
-      FlameBlocListener<ScoreBloc, ScoreState>(
+      FlameBlocListener<ScoreBloc, int>(
         listenWhen: (previousState, newState) {
-          return newState.score != 0;
+          return newState != 0;
         },
         onNewState: (state) => _newFood(),
       ),

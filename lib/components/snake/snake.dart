@@ -45,9 +45,9 @@ class Snake extends PositionComponent
     addAll(bodyParts);
 
     await add(
-      FlameBlocListener<GameFlowBloc, GameFlowState>(
+      FlameBlocListener<GameFlowBloc, GameState>(
         listenWhen: (previousState, newState) {
-          return newState.gameState == GameState.gameOver;
+          return newState == GameState.gameOver;
         },
         onNewState: (state) {
           for (final bodyPart in bodyParts) {
@@ -60,7 +60,7 @@ class Snake extends PositionComponent
 
   @override
   void update(double dt) {
-    if (!hasStarted && gameFlowBloc.state.gameState == GameState.playing) {
+    if (!hasStarted && gameFlowBloc.state == GameState.playing) {
       hasStarted = true;
       moveHeadHistory.add(DirectionUtil.directionToVector(Direction.right));
       final effect = SnakeEffect.createHeadEffect(

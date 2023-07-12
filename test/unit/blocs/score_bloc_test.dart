@@ -8,7 +8,7 @@ void main() {
       'Default state',
       build: () => ScoreBloc(),
       verify: (bloc) {
-        expect(bloc.state.score, 0);
+        expect(bloc.state, 0);
       },
     );
 
@@ -16,15 +16,15 @@ void main() {
       'IncrementStore',
       build: () => ScoreBloc(),
       act: (bloc) => bloc.add(IncrementScore()),
-      expect: () => [ScoreState(score: 1)],
+      expect: () => [1],
     );
 
     blocTest(
       'ResetStore',
       build: () => ScoreBloc(),
-      seed: () => ScoreState(score: 5),
+      seed: () => 5,
       act: (bloc) => bloc.add(ResetScore()),
-      expect: () => [ScoreState(score: 0)],
+      expect: () => [0],
     );
   });
 }

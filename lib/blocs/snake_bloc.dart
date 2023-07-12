@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:snake_game/utils/direction_util.dart';
@@ -13,36 +14,37 @@ class DragScreenEvent extends SnakeEvent {
   });
 }
 
-class TapArrowKeyEvent extends SnakeEvent {
+class UpdateDirectionEvent extends SnakeEvent {
   final Direction directionRequested;
-  TapArrowKeyEvent({
+  UpdateDirectionEvent({
     required this.directionRequested,
   });
 }
 
-class CollideCellEvent extends SnakeEvent {}
-
 class ResetSnakeEvent extends SnakeEvent {}
 
-class SnakeState {
+class SnakeState extends Equatable {
   final Direction direction;
-  SnakeState({
+
+  const SnakeState({
     required this.direction,
   });
 
   SnakeState copyWith({
     Direction? direction,
-    int? lengthSnake,
   }) {
     return SnakeState(
       direction: direction ?? this.direction,
     );
   }
+
+  @override
+  List<Object> get props => [direction];
 }
 
 class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
   SnakeBloc()
-      : super(SnakeState(
+      : super(const SnakeState(
           direction: Direction.right,
         )) {
     on<DragScreenEvent>((event, emit) {
@@ -51,13 +53,10 @@ class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
         event.dragLastPosition,
       );
 
-      if (directionRequested ==
-          DirectionUtil.getForbiddenDirectionOf(state.direction)) {
-        return;
-      }
-      emit(state.copyWith(direction: directionRequested));
+      add(UpdateDirectionEvent(directionRequested: directionRequested));
     });
-    on<TapArrowKeyEvent>((event, emit) {
+
+    on<UpdateDirectionEvent>((event, emit) {
       if (event.directionRequested ==
           DirectionUtil.getForbiddenDirectionOf(state.direction)) {
         return;
@@ -65,8 +64,12 @@ class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
       emit(state.copyWith(direction: event.directionRequested));
     });
 
-    on<ResetSnakeEvent>((event, emit) => emit(SnakeState(
+    on<ResetSnakeEvent>(
+      (event, emit) => emit(
+        const SnakeState(
           direction: Direction.right,
-        )));
+        ),
+      ),
+    );
   }
 }

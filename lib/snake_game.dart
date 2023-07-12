@@ -41,10 +41,10 @@ class SnakeGame extends FlameGame
     await add(
       FlameMultiBlocProvider(
         providers: [
-          FlameBlocProvider<ScoreBloc, ScoreState>(
+          FlameBlocProvider<ScoreBloc, int>(
             create: () => scoreBloc,
           ),
-          FlameBlocProvider<GameFlowBloc, GameFlowState>(
+          FlameBlocProvider<GameFlowBloc, GameState>(
             create: () => gameFlowBloc,
           ),
           FlameBlocProvider<SnakeBloc, SnakeState>(
@@ -119,7 +119,7 @@ class SnakeGame extends FlameGame
   ) {
     final isKeyDown = event is RawKeyDownEvent;
 
-    if (gameFlowBloc.state.gameState == GameState.gameOver || !isKeyDown) {
+    if (gameFlowBloc.state == GameState.gameOver || !isKeyDown) {
       return KeyEventResult.ignored;
     }
 
@@ -129,9 +129,9 @@ class SnakeGame extends FlameGame
       return KeyEventResult.ignored;
     }
 
-    if (gameFlowBloc.state.gameState == GameState.playing) {
-      snakeBloc.add(TapArrowKeyEvent(directionRequested: direction));
-    } else if (gameFlowBloc.state.gameState == GameState.intro) {
+    if (gameFlowBloc.state == GameState.playing) {
+      snakeBloc.add(UpdateDirectionEvent(directionRequested: direction));
+    } else if (gameFlowBloc.state == GameState.intro) {
       startGame();
     }
     return KeyEventResult.handled;
