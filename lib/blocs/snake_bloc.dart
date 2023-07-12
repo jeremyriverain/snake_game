@@ -40,12 +40,11 @@ class SnakeState {
   }
 }
 
-final initialState = SnakeState(
-  direction: Direction.right,
-);
-
 class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
-  SnakeBloc() : super(initialState) {
+  SnakeBloc()
+      : super(SnakeState(
+          direction: Direction.right,
+        )) {
     on<DragScreenEvent>((event, emit) {
       final directionRequested = DirectionUtil.vectorsToDirection(
         event.dragStartPosition,
@@ -66,6 +65,8 @@ class SnakeBloc extends Bloc<SnakeEvent, SnakeState> {
       emit(state.copyWith(direction: event.directionRequested));
     });
 
-    on<ResetSnakeEvent>((event, emit) => emit(initialState));
+    on<ResetSnakeEvent>((event, emit) => emit(SnakeState(
+          direction: Direction.right,
+        )));
   }
 }

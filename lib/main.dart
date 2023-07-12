@@ -14,17 +14,18 @@ void main() async {
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 final ScoreBloc scoreBloc = ScoreBloc();
 final GameFlowBloc gameFlowBloc = GameFlowBloc();
-final Game game = SnakeGame(scoreBloc: scoreBloc, gameFlowBloc: gameFlowBloc);
 
 class MyApp extends StatelessWidget {
-  const MyApp({
+  MyApp({
     super.key,
   });
+
+  final Game game = SnakeGame(scoreBloc: scoreBloc, gameFlowBloc: gameFlowBloc);
 
   static const instructionsOverlay = 'instructionsOverlay';
   static const scoreOverlay = 'scoreOverlay';

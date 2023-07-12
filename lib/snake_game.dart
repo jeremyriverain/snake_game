@@ -112,10 +112,6 @@ class SnakeGame extends FlameGame
     overlays.remove('gameOverOverlay');
   }
 
-  void onEatFood() {
-    scoreBloc.add(IncrementScore());
-  }
-
   @override
   KeyEventResult onKeyEvent(
     RawKeyEvent event,

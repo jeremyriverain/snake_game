@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:snake_game/blocs/game_flow_bloc.dart';
+import 'package:snake_game/blocs/score_bloc.dart';
 import 'package:snake_game/blocs/snake_bloc.dart';
 import 'package:snake_game/components/snake/snake_body_part.dart';
 import 'package:snake_game/components/snake/snake_head.dart';
@@ -18,6 +19,9 @@ class Snake extends PositionComponent
   Snake() : super(priority: 1);
 
   bool hasStarted = false;
+  int lastIndexHistory = 0;
+  Direction lastBodyPartDirection = Direction.right;
+  final List<Vector2> moveHeadHistory = [];
 
   @override
   onLoad() async {
@@ -54,34 +58,13 @@ class Snake extends PositionComponent
     );
   }
 
-  void whenDead() {
-    gameRef.gameOver();
-  }
-
-  void whenEatFood() {
-    gameRef.onEatFood();
-  }
-
-  final List<Vector2> moveHeadHistory = [];
-
-  Direction onCompleteHeadEffect() {
-    final direction = bloc.state.direction;
-    moveHeadHistory.add(DirectionUtil.directionToVector(direction));
-    return direction;
-  }
-
-  List<Vector2> onCompleteBodyEffect() {
-    return moveHeadHistory;
-  }
-
   @override
   void update(double dt) {
     if (!hasStarted && gameFlowBloc.state.gameState == GameState.playing) {
       hasStarted = true;
-      final direction = gameRef.snakeBloc.state.direction;
-      moveHeadHistory.add(DirectionUtil.directionToVector(direction));
+      moveHeadHistory.add(DirectionUtil.directionToVector(Direction.right));
       final effect = SnakeEffect.createHeadEffect(
-        direction: direction,
+        direction: Direction.right,
         onComplete: onCompleteHeadEffect,
         component: bodyParts.first,
         previousDirection: Direction.right,
@@ -92,15 +75,60 @@ class Snake extends PositionComponent
           SnakeEffect.createBodyEffect(
             component: bodyParts[i],
             indexHistory: 0,
-            offset: List.generate(
-              i,
-              (index) => DirectionUtil.directionToVector(direction),
-            ),
+            offset: createOffsetBodyPart(i),
             headHistory: moveHeadHistory,
             onComplete: onCompleteBodyEffect,
+            indexBodyPart: i,
           ),
         );
       }
     }
+  }
+
+  List<Vector2> createOffsetBodyPart(int i) {
+    return List.generate(
+      i,
+      (index) => DirectionUtil.directionToVector(Direction.right),
+    );
+  }
+
+  void whenDead() {
+    gameRef.gameOver();
+  }
+
+  void whenEatFood() {
+    scoreBloc.add(IncrementScore());
+    final newBodyPart = SnakeBodyPart(hasHitbox: true)
+      ..position = bodyParts.last.position -
+          DirectionUtil.directionToVector(lastBodyPartDirection);
+    bodyParts.add(newBodyPart);
+    add(newBodyPart);
+    final offset = createOffsetBodyPart(bodyParts.length - 1);
+    newBodyPart.addAll(SnakeEffect.createBodyEffect(
+      component: newBodyPart,
+      indexHistory: lastIndexHistory,
+      offset: offset,
+      headHistory: moveHeadHistory,
+      onComplete: onCompleteBodyEffect,
+      indexBodyPart: bodyParts.length - 1,
+    ));
+  }
+
+  Direction onCompleteHeadEffect() {
+    final direction = bloc.state.direction;
+    moveHeadHistory.add(DirectionUtil.directionToVector(direction));
+    return direction;
+  }
+
+  List<Vector2> onCompleteBodyEffect({
+    required int indexBodyPart,
+    required int indexHistory,
+    required Direction direction,
+  }) {
+    if (indexBodyPart == bodyParts.length - 1) {
+      lastIndexHistory = indexHistory;
+      lastBodyPartDirection = direction;
+    }
+    return moveHeadHistory;
   }
 }

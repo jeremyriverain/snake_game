@@ -48,12 +48,18 @@ class SnakeEffect {
     required int indexHistory,
     required List<Vector2> offset,
     required List<Vector2> headHistory,
-    required List<Vector2> Function() onComplete,
+    required int indexBodyPart,
+    required List<Vector2> Function({
+      required int indexBodyPart,
+      required int indexHistory,
+      required Direction direction,
+    }) onComplete,
   }) {
     final List<Vector2> completeHistory = [
       ...offset,
       ...headHistory,
     ];
+    final startPosition = component.position;
     return [
       MoveByEffect(
         completeHistory[indexHistory],
@@ -62,13 +68,21 @@ class SnakeEffect {
           curve: Curves.linear,
         ),
         onComplete: () {
-          final newHistory = onComplete();
+          final newIndexHistory = indexHistory + 1;
+          final newHistory = onComplete(
+              indexBodyPart: indexBodyPart,
+              indexHistory: newIndexHistory,
+              direction: DirectionUtil.vectorsToDirection(
+                startPosition,
+                startPosition + completeHistory[indexHistory],
+              ));
           component.addAll(createBodyEffect(
             component: component,
-            indexHistory: indexHistory + 1,
+            indexHistory: newIndexHistory,
             offset: offset,
             headHistory: newHistory,
             onComplete: onComplete,
+            indexBodyPart: indexBodyPart,
           ));
         },
       )..removeOnFinish = true,
